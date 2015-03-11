@@ -46,7 +46,7 @@ describe('when no expression is used', function () {
 
 describe('when using wildcard expression', function () {
 
-  it('should repeat every bar', function () {
+  it('should repeat any bar', function () {
     var result = expr([
       ['*.1.01', 1, 440]
     ], 2, 4);
@@ -59,7 +59,7 @@ describe('when using wildcard expression', function () {
     expect(result[1][2]).to.equal(440);
   });
 
-  it('should repeat every beat', function () {
+  it('should repeat any beat', function () {
     var result = expr([
       ['1.*.01']
     ], 2, 4);
@@ -70,7 +70,7 @@ describe('when using wildcard expression', function () {
     expect(result[3][0]).to.equal('1.4.01');
   });
 
-  it('should repeat every bar and beat', function () {
+  it('should repeat any bar and beat', function () {
     var result = expr([
       ['*.*.01']
     ], 4, 4);
@@ -93,7 +93,7 @@ describe('when using wildcard expression', function () {
     expect(result[15][0]).to.equal('4.4.01');
   });
 
-  it('should repeat every tick', function () {
+  it('should repeat any tick', function () {
     var result = expr([
       ['1.1.*']
     ], 1, 1);
@@ -102,7 +102,7 @@ describe('when using wildcard expression', function () {
     expect(result[95][0]).to.equal('1.1.96');
   });
 
-  it('should repeat every bar, beat and tick', function () {
+  it('should repeat any bar, beat and tick', function () {
     var result = expr([
       ['*.*.*']
     ], 2, 4);
@@ -209,7 +209,7 @@ describe('when using even/odd expression', function () {
 // describe('when using modulus expression', function () {
 
 //   describe('when no starting point is defined', function () {
-//     it('should start from 1 and repeat every {n} ticks', function () {
+//     it('should start from 1 and modulate every {n} ticks', function () {
 //       var result = expr([
 //         ['1.1.%30']
 //       ], 1, 1);
@@ -220,7 +220,7 @@ describe('when using even/odd expression', function () {
 //       expect(result[3][0]).to.equal('1.1.91');
 //     });
 
-//     it('should start from 1 and repeat every {n} beats', function () {
+//     it('should start from 1 and modulate every {n} beats', function () {
 //       var result = expr([
 //         ['1.%3.01']
 //       ], 1, 4);
@@ -229,7 +229,7 @@ describe('when using even/odd expression', function () {
 //       expect(result[1][0]).to.equal('1.4.01');
 //     });
 
-//     it('should start from 1 and repeat every {n} beats and ticks', function () {
+//     it('should start from 1 and modulate every {n} beats and ticks', function () {
 //       var result = expr([
 //         ['1.%3.%30']
 //       ], 1, 4);
@@ -247,7 +247,7 @@ describe('when using even/odd expression', function () {
 
 //   describe('when a starting point is defined', function () {
 
-//     it('should start from it and repeat every {n} ticks', function () {
+//     it('should start from it and modulate every {n} ticks', function () {
 //       var result = expr([
 //         ['1.1.5%20']
 //       ], 1, 1);
@@ -259,7 +259,7 @@ describe('when using even/odd expression', function () {
 //       expect(result[4][0]).to.equal('1.1.85');
 //     });
 
-//     it('should start from it and repeat every {n} beats', function () {
+//     it('should start from it and modulate every {n} beats', function () {
 //       var result = expr([
 //         ['1.2%3.01']
 //       ], 1, 12);
@@ -282,11 +282,6 @@ describe('when using even/odd expression', function () {
 */
 
 describe('when using mixed expression', function () {
-
-  /*
-    what about duplicates, should they be magically removed?
-    probably not...
-  */
 
   it('should repeat every bar and even beats', function () {
     var result = expr([
@@ -314,7 +309,7 @@ describe('when using mixed expression', function () {
     expect(result[191][0]).to.equal('1.4.95');
   });
 
-  // it('should repeat odd bars, every beat and every {n} ticks', function () {
+  // it('should repeat odd bars, every beat and modulate every {n} ticks', function () {
   //   var result = expr([
   //     ['odd.*.%30']
   //   ], 2, 2);

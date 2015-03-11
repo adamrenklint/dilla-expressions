@@ -31,12 +31,17 @@ function makeExpressionFunction (expression) {
   return function expressionFn (position) {
     var positionFragments = getFragments(position);
     var valid = true;
-    exprFragments.forEach(function (exprFragment, index) {
-      if (exprFragment === '*') return;
+    exprFragments.some(function (exprFragment, index) {
+      if (typeof exprFragment === 'number' && positionFragments[index] === exprFragment) return;
       if (exprFragment === 'even' && positionFragments[index] % 2 === 0) return;
       if (exprFragment === 'odd' && positionFragments[index] % 2 === 1) return;
-      if (typeof exprFragment === 'number' && positionFragments[index] === exprFragment) return;
+      if (exprFragment === '*') return;
+      // if (typeof exprFragment === 'string' && exprFragment.indexOf('%') >= 0) {
+        // console.log('deal with modulus', exprFragment, positionFragments[index])
+      // }
+      // position is invalid, break out early
       valid = false;
+      return true;
     });
     return valid;
   }
