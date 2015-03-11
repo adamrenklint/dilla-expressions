@@ -59,8 +59,6 @@ describe('when using wildcard expression', function () {
     expect(result[1][2]).to.equal(440);
   });
 
-  return;
-
   it('should repeat every beat', function () {
     var result = expr([
       ['1.*.01']
@@ -115,8 +113,8 @@ describe('when using wildcard expression', function () {
     expect(result[384][0]).to.equal('2.1.01');
   });
 });
-return;
-xdescribe('when using even/odd expression', function () {
+
+describe('when using even/odd expression', function () {
 
   it('should repeat even bars', function () {
     var result = expr([
@@ -169,13 +167,13 @@ xdescribe('when using even/odd expression', function () {
     var result = expr([
       ['odd.even.10']
     ], 4, 6);
-    expect(result.length).to.equal(2);
+    expect(result.length).to.equal(6);
     expect(result[0][0]).to.equal('1.2.10');
     expect(result[1][0]).to.equal('1.4.10');
     expect(result[2][0]).to.equal('1.6.10');
-    expect(result[4][0]).to.equal('3.2.10');
-    expect(result[5][0]).to.equal('3.4.10');
-    expect(result[6][0]).to.equal('3.6.10');
+    expect(result[3][0]).to.equal('3.2.10');
+    expect(result[4][0]).to.equal('3.4.10');
+    expect(result[5][0]).to.equal('3.6.10');
   });
 
   it('should repeat even ticks', function () {
@@ -183,7 +181,7 @@ xdescribe('when using even/odd expression', function () {
       ['1.1.even']
     ], 1, 1);
     expect(result.length).to.equal(48);
-    expect(result[0][0]).to.equal('1.1.2');
+    expect(result[0][0]).to.equal('1.1.02');
     expect(result[47][0]).to.equal('1.1.96');
   });
 
@@ -192,7 +190,7 @@ xdescribe('when using even/odd expression', function () {
       ['1.1.odd']
     ], 1, 1);
     expect(result.length).to.equal(48);
-    expect(result[0][0]).to.equal('1.1.1');
+    expect(result[0][0]).to.equal('1.1.01');
     expect(result[47][0]).to.equal('1.1.95');
   });
 
@@ -201,9 +199,9 @@ xdescribe('when using even/odd expression', function () {
       ['even.odd.odd']
     ], 2, 4);
     expect(result.length).to.equal(96);
-    expect(result[0][0]).to.equal('2.1.1');
-    expect(result[1][0]).to.equal('2.1.3');
-    expect(result[48][0]).to.equal('2.3.1');
+    expect(result[0][0]).to.equal('2.1.01');
+    expect(result[1][0]).to.equal('2.1.03');
+    expect(result[48][0]).to.equal('2.3.01');
     expect(result[95][0]).to.equal('2.3.95');
   });
 });
@@ -283,7 +281,7 @@ xdescribe('when using even/odd expression', function () {
 
 */
 
-xdescribe('when using mixed expression', function () {
+describe('when using mixed expression', function () {
 
   /*
     what about duplicates, should they be magically removed?
@@ -292,26 +290,28 @@ xdescribe('when using mixed expression', function () {
 
   it('should repeat every bar and even beats', function () {
     var result = expr([
-      ['*.odd.01']
+      ['*.even.01']
     ], 2, 4);
     expect(result.length).to.equal(4);
-    expect(result[0][0]).to.equal('1.2.1');
-    expect(result[1][0]).to.equal('1.4.1');
-    expect(result[2][0]).to.equal('2.2.1');
-    expect(result[3][0]).to.equal('2.4.1');
+    expect(result[0][0]).to.equal('1.2.01');
+    expect(result[1][0]).to.equal('1.4.01');
+    expect(result[2][0]).to.equal('2.2.01');
+    expect(result[3][0]).to.equal('2.4.01');
   });
 
   it('should repeat every beat and odd ticks', function () {
     var result = expr([
       ['1.*.odd']
     ], 2, 4);
+    
     expect(result.length).to.equal(192);
-    expect(result[0][0]).to.equal('1.1.1');
-    expect(result[2][0]).to.equal('1.1.3');
-    expect(result[48][0]).to.equal('1.2.1');
+    expect(result[0][0]).to.equal('1.1.01');
+    expect(result[1][0]).to.equal('1.1.03');
+    expect(result[48][0]).to.equal('1.2.01');
     expect(result[95][0]).to.equal('1.2.95');
-    expect(result[96][0]).to.equal('1.4.1');
-    expect(result[192][0]).to.equal('1.4.95');
+    expect(result[96][0]).to.equal('1.3.01');
+    expect(result[144][0]).to.equal('1.4.01');
+    expect(result[191][0]).to.equal('1.4.95');
   });
 
   // it('should repeat odd bars, every beat and every {n} ticks', function () {

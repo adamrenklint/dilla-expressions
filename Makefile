@@ -2,10 +2,10 @@ install:
 	@npm install
 
 test:
-	@node_modules/mocha/bin/mocha
+	@node_modules/mocha/bin/mocha -s 5
 
 watch:
-	@node_modules/mocha/bin/mocha -w
+	@node_modules/mocha/bin/mocha -w -s 5
 
 publish:
 	@npm publish && make tag
