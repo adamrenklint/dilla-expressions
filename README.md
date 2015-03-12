@@ -17,11 +17,11 @@ var expr = require('dilla-expressions');
 var barsPerLoop = 2;
 var beatsPerBar = 4;
 
-var events = [
+var notes = [
   ['*.even.01']
 ];
 
-var expanded = expr(events, barsPerLoop, beatsPerBar);
+var expanded = expr(notes, barsPerLoop, beatsPerBar);
 
 expect(result.length).to.equal(4);
 expect(result[0][0]).to.equal('1.2.01');
@@ -40,6 +40,8 @@ expect(result[3][0]).to.equal('2.4.01');
 
 - **1.0.0**
   - Initial release with wildcard (```*```), ```even``` and ```odd``` expression operators
+- **1.0.1**
+  - CHANGED: *events* are now called *notes* [dilla/8](https://github.com/adamrenklint/dilla/issues/8)
 
 ## License
 
