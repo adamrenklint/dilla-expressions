@@ -14,8 +14,8 @@ describe('when barsPerLoop is not defined', function () {
   it('should throw an error', function () {
     expect(function () {
       expr([
-        ['1.1.01', 1, 440],
-        ['2.4.01', 2, 330]
+        ['1.1.01', 1, {}],
+        ['2.4.01', 2, {}]
       ]);
     }).to.throw(Error);
   })
@@ -25,8 +25,8 @@ describe('when beatsPerBar is not defined', function () {
   it('should throw an error', function () {
     expect(function () {
       expr([
-        ['1.1.01', 1, 440],
-        ['2.4.01', 2, 330]
+        ['1.1.01', 1, {}],
+        ['2.4.01', 2, {}]
       ], 2);
     }).to.throw('')
   })
@@ -35,8 +35,8 @@ describe('when beatsPerBar is not defined', function () {
 describe('when no expression is used', function () {
   it('should not change normal positions', function () {
     var result = expr([
-      ['1.1.01', 1, 440],
-      ['2.4.01', 2, 330]
+      ['1.1.01', 1, {}],
+      ['2.4.01', 2, {}]
     ], 2, 4);
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('1.1.01');
@@ -48,15 +48,15 @@ describe('when using wildcard expression', function () {
 
   it('should repeat any bar', function () {
     var result = expr([
-      ['*.1.01', 1, 440]
+      ['*.1.01', 1, { 'freq': 440 }]
     ], 2, 4);
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[0][1]).to.equal(1);
-    expect(result[0][2]).to.equal(440);
+    expect(result[0][2].freq).to.equal(440);
     expect(result[1][0]).to.equal('2.1.01');
     expect(result[1][1]).to.equal(1);
-    expect(result[1][2]).to.equal(440);
+    expect(result[1][2].freq).to.equal(440);
   });
 
   it('should repeat any beat', function () {
