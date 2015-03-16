@@ -11,7 +11,7 @@ function getPossiblePositions (barsPerLoop, beatsPerBar) {
       tick = 0;
       while (++tick <= 96) {
         displayTick = tick < 10 ? '0' + tick : tick;
-        possibles.push([bar, beat, displayTick].join('.'))
+        possibles.push([bar, beat, displayTick].join('.'));
       }
     }
   }
@@ -23,7 +23,7 @@ function getFragments (position) {
     var fragmentNumber = parseInt(fragment, 10);
     if (!isNaN(fragmentNumber)) return fragmentNumber;
     return fragment;
-  })
+  });
 }
 
 function makeExpressionFunction (expression) {
@@ -44,7 +44,7 @@ function makeExpressionFunction (expression) {
       return true;
     });
     return valid;
-  }
+  };
 }
 
 function expressions (notes, barsPerLoop, beatsPerBar) {
