@@ -300,7 +300,7 @@ describe('when using mixed expression', function () {
     ], 2, 4);
     
     expect(result.length).to.equal(192);
-    expect(result[0][0]).to.equal('1.1.01');
+    expect(result[0][0]).to.equal('1.1.012');
     expect(result[1][0]).to.equal('1.1.03');
     expect(result[48][0]).to.equal('1.2.01');
     expect(result[95][0]).to.equal('1.2.95');
