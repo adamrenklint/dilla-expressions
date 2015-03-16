@@ -23,11 +23,11 @@ var notes = [
 
 var expanded = expr(notes, barsPerLoop, beatsPerBar);
 
-expect(result.length).to.equal(4);
-expect(result[0][0]).to.equal('1.2.01');
-expect(result[1][0]).to.equal('1.4.01');
-expect(result[2][0]).to.equal('2.2.01');
-expect(result[3][0]).to.equal('2.4.01');
+expect(expanded.length).to.equal(4);
+expect(expanded[0][0]).to.equal('1.2.01');
+expect(expanded[1][0]).to.equal('1.4.01');
+expect(expanded[2][0]).to.equal('2.2.01');
+expect(expanded[3][0]).to.equal('2.4.01');
 ```
 
 ### Expression operators
