@@ -22,7 +22,7 @@ check-coverage: coverage
 	@$(ISTANBUL) check-coverage --statement $(COVERAGE_LIMIT) --branch $(COVERAGE_LIMIT) --function $(COVERAGE_LIMIT)
 
 report-coverage:
-	@CODECLIMATE_REPO_TOKEN=$(CC_REPO_TOKEN)  < coverage/lcov.info
+	@CODECLIMATE_REPO_TOKEN=$(CC_REPO_TOKEN) $(CC_REPORTER) < coverage/lcov.info
 
 publish: test check-coverage report-coverage
 	@npm publish && make tag
