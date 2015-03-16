@@ -1,6 +1,6 @@
 # dilla-expressions
 
-[![NPM version](https://badge.fury.io/js/dilla-expressions.png)](http://badge.fury.io/js/dilla-expressions) [![Build Status](https://travis-ci.org/adamrenklint/dilla-expressions.png?branch=master)](https://travis-ci.org/adamrenklint/dilla-expressions) [![Code Climate](https://codeclimate.com/github/adamrenklint/dilla-expressions.png)](https://codeclimate.com/github/adamrenklint/dilla-expressions) [![Dependency Status](https://david-dm.org/adamrenklint/dilla-expressions.png?theme=shields.io)](https://david-dm.org/adamrenklint/dilla-expressions)
+[![NPM version](https://badge.fury.io/js/dilla-expressions.png)](http://badge.fury.io/js/dilla-expressions) [![Build Status](https://travis-ci.org/adamrenklint/dilla-expressions.png?branch=master)](https://travis-ci.org/adamrenklint/dilla-expressions) [![Code Climate](https://codeclimate.com/github/adamrenklint/dilla-expressions.png)](https://codeclimate.com/github/adamrenklint/dilla-expressions) [![Test Coverage](https://codeclimate.com/github/adamrenklint/dilla-expressions/badges/coverage.svg)](https://codeclimate.com/github/adamrenklint/dilla-expressions) [![Dependency Status](https://david-dm.org/adamrenklint/dilla-expressions.png?theme=shields.io)](https://david-dm.org/adamrenklint/dilla-expressions)
 
 > expand expressions for repeating notes into flat positions in [dilla](https://github.com/adamrenklint/dilla)
 
@@ -35,6 +35,12 @@ expect(expanded[3][0]).to.equal('2.4.01');
 - ```*```
 - ```even```
 - ```odd```
+
+## Develop
+
+- ```make test```
+- ```make coverage```
+- ```make publish```
 
 ## Changelog
 
