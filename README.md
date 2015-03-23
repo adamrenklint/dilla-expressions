@@ -31,16 +31,26 @@ expect(expanded[2][0]).to.equal('2.2.01');
 expect(expanded[3][0]).to.equal('2.4.01');
 ```
 
-### Expression operators
+## Operators
 
-- ```*```
-- ```even```
-- ```odd```
-- ```% (modulus)```
+### Wildcard
 
-### Examples
+```js
+> "*.*.32"
+= "1.1.32", "1.2.32", "1.3.32", "1.4.32", "2.1.32", "2.2.32", "2.3.32", "2.4.32"
+```
 
-#### Modulus
+### Odd/even
+
+```js
+> "1.even.01"
+= "1.2.01", "1.4.01"
+
+> "1.odd.01"
+= "1.1.01", "1.1.01"
+```
+
+### Modulus
 
 ```js
 > "1.%3.%30"
@@ -53,6 +63,8 @@ expect(expanded[3][0]).to.equal('2.4.01');
 ## Custom matchers
 
 It is possible to add a custom *matcher callback*, a function which gets executed for each possible position within the range.
+
+The matcher function receives two arguments, arrays with bar, beat and tick values - for user defined expression, and possible matched position.
 
 The stack of matchers will continue to execute until a position has been accepted or until the stack ends.
 
