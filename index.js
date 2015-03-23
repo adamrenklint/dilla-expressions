@@ -26,6 +26,13 @@ function getFragments (position) {
   });
 }
 
+var matchers = [];
+
+function addMatcher (matcher) {
+  if (!matcher || typeof matcher !== 'function') throw new Error('Invalid argument: matcher is not a function');
+  matchers.push(matcher);
+}
+
 function makeExpressionFunction (expression) {
   var exprFragments = getFragments(expression);
   return function expressionFn (position) {
@@ -36,13 +43,24 @@ function makeExpressionFunction (expression) {
       if (exprFragment === 'even' && positionFragments[index] % 2 === 0) return;
       if (exprFragment === 'odd' && positionFragments[index] % 2 === 1) return;
       if (exprFragment === '*') return;
+
       // if (typeof exprFragment === 'string' && exprFragment.indexOf('%') >= 0) {
         // console.log('deal with modulus', exprFragment, positionFragments[index])
       // }
       // position is invalid, break out early
+      // console.log('>', position, positionFragments);
       valid = false;
       return true;
     });
+
+    var _matchers = matchers.slice();
+    var matcher;
+    while (!valid && _matchers.length) {
+      matcher = _matchers.shift();
+      if (matcher(position, positionFragments)) {
+        valid = true;
+      }
+    }
     return valid;
   };
 }
@@ -75,4 +93,5 @@ function expressions (notes, options) {
   });
 }
 
+expressions.addMatcher = addMatcher;
 module.exports = expressions;

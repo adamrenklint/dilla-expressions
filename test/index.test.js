@@ -368,3 +368,114 @@ describe('when using mixed expression', function () {
   //   expect(result[7][0]).to.equal('1.2.91');
   // });
 });
+
+describe('addMatcher (matcher)', function () {
+  describe('when matcher is not a function', function () {
+    it('should throw an error', function () {
+      expect(function () {
+        expr.addMatcher();
+      }).to.throw(Error);
+      expect(function () {
+        expr.addMatcher('foo');
+      }).to.throw(Error);
+      expect(function () {
+        expr.addMatcher(1323);
+      }).to.throw(Error);
+      expect(function () {
+        expr.addMatcher({'pos': '1.1.01' });
+      }).to.throw(Error);
+      expect(function () {
+        expr.addMatcher(['1.1.1.1.1']);
+      }).to.throw(Error);
+    });
+  });
+
+  describe('when matcher is a function', function () {
+    it('should execute the matcher for each possible note', function () {
+      var count = 0;
+      var last = null;
+      expr.addMatcher(function (position, fragments) {
+        count++;
+        last = position;
+      });
+      expr([
+        ['1.1.*']
+      ], standardOptions);
+      expect(count).to.equal(672);
+      expect(last).to.equal('2.4.96');
+    });
+    describe('when matcher returns false', function () {
+      describe('when another rule matches', function () {
+        it('should include the note', function () {
+          expr.addMatcher(function (position, fragments) {
+            if (position === '1.1.03') return false;
+          });
+          var result = expr([
+            ['1.1.odd']
+          ], standardOptions);
+          var found = result.filter(function (res) {
+            return res[0] === '1.1.03';
+          });
+          expect(found.length).to.equal(1);
+        });
+      });
+      describe('when no other rule matches', function () {
+        it('should not include the note', function () {
+          expr.addMatcher(function (position, fragments) {
+            if (position === '1.1.02') return false;
+          });
+          var result = expr([
+            ['1.1.odd']
+          ], standardOptions);
+          var found = result.filter(function (res) {
+            return res[0] === '1.1.02';
+          });
+          expect(found.length).to.equal(0);
+        });
+      });
+    });
+    describe('when matcher returns true', function () {
+      describe('when a previous rule matches', function () {
+        it('should include the note', function () {
+          expr.addMatcher(function (position, fragments) {
+            if (position === '1.1.05') return true;
+          });
+          var result = expr([
+            ['1.1.odd']
+          ], standardOptions);
+          var found = result.filter(function (res) {
+            return res[0] === '1.1.05';
+          });
+          expect(found.length).to.equal(1);
+        });
+        it('should not execute matcher', function () {
+          var count = 0;
+          expr.addMatcher(function (position, fragments) {
+            return true;
+          });
+          expr.addMatcher(function (position, fragments) {
+            count++;
+          });
+          var result = expr([
+            ['1.1.*']
+          ], standardOptions);
+          expect(count).to.equal(0);
+        });
+      });
+      describe('when no other rule matches', function () {
+        it('should include the note', function () {
+          expr.addMatcher(function (position, fragments) {
+            if (position === '1.1.04') return true;
+          });
+          var result = expr([
+            ['1.1.odd']
+          ], standardOptions);
+          var found = result.filter(function (res) {
+            return res[0] === '1.1.04';
+          });
+          expect(found.length).to.equal(1);
+        });
+      });
+    });
+  });
+});

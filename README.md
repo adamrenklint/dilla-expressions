@@ -37,6 +37,20 @@ expect(expanded[3][0]).to.equal('2.4.01');
 - ```even```
 - ```odd```
 
+## Custom matchers
+
+It is possible to add a custom *matcher callback*, a function which gets executed for each possible position within the range.
+
+The stack of matchers will continue to execute until a position has been accepted or until the stack ends.
+
+```js
+expr.addMatcher(function (position, fragments) {
+  if (position === '1.1.45') return true;
+  if (fragments[0] === 1 && fragments[2] === 96) return true;
+  return false;
+});
+```
+
 ## Develop
 
 - ```make test```
@@ -51,6 +65,7 @@ expect(expanded[3][0]).to.equal('2.4.01');
   - CHANGED: *events* are now called *notes* [dilla/8](https://github.com/adamrenklint/dilla/issues/8)
 - **1.1.0**
   - CHANGED: expects options object instead of barsPerLoop and beatsPerBar separately [#4](https://github.com/adamrenklint/dilla-expressions/issues/4)
+  - NEW: possible to add custom matcher callback [#3](https://github.com/adamrenklint/dilla-expressions/issues/3)
 
 ## License
 
