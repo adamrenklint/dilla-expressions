@@ -10,7 +10,8 @@ describe('when events is not defined', function () {
   })
 });
 
-describe('when barsPerLoop is not defined', function () {
+
+describe('when options is not defined', function () {
   it('should throw an error', function () {
     expect(function () {
       expr([
@@ -18,26 +19,48 @@ describe('when barsPerLoop is not defined', function () {
         ['2.4.01', 2, {}]
       ]);
     }).to.throw(Error);
-  })
+  });
 });
 
-describe('when beatsPerBar is not defined', function () {
-  it('should throw an error', function () {
-    expect(function () {
-      expr([
-        ['1.1.01', 1, {}],
-        ['2.4.01', 2, {}]
-      ], 2);
-    }).to.throw('')
-  })
+describe('when options is an object', function () {
+  describe('when options.barsPerLoop is not a number', function () {
+    it('should throw an error', function () {
+      expect(function () {
+        expr([
+          ['1.1.01', 1, {}],
+          ['2.4.01', 2, {}]
+        ], {
+          'beatsPerBar': 4
+        });
+      }).to.throw(Error);
+    });
+  });
+  describe('when options.beatsPerBar is not a number', function () {
+    it('should throw an error', function () {
+      expect(function () {
+        expr([
+          ['1.1.01', 1, {}],
+          ['2.4.01', 2, {}]
+        ], {
+          'barsPerLoop': 2,
+          'beatsPerBar': 'foo'
+        });
+      }).to.throw(Error);
+    });
+  });
 });
+
+var standardOptions = {
+  'beatsPerBar': 4,
+  'barsPerLoop': 2
+};
 
 describe('when no expression is used', function () {
   it('should not change normal positions', function () {
     var result = expr([
       ['1.1.01', 1, {}],
       ['2.4.01', 2, {}]
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[1][0]).to.equal('2.4.01');
@@ -49,7 +72,7 @@ describe('when using wildcard expression', function () {
   it('should repeat any bar', function () {
     var result = expr([
       ['*.1.01', 1, { 'freq': 440 }]
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[0][1]).to.equal(1);
@@ -62,7 +85,7 @@ describe('when using wildcard expression', function () {
   it('should repeat any beat', function () {
     var result = expr([
       ['1.*.01']
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(4);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[1][0]).to.equal('1.2.01');
@@ -73,7 +96,10 @@ describe('when using wildcard expression', function () {
   it('should repeat any bar and beat', function () {
     var result = expr([
       ['*.*.01']
-    ], 4, 4);
+    ], {
+      'beatsPerBar': 4,
+      'barsPerLoop': 4
+    });
     expect(result.length).to.equal(16);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[1][0]).to.equal('1.2.01');
@@ -96,7 +122,10 @@ describe('when using wildcard expression', function () {
   it('should repeat any tick', function () {
     var result = expr([
       ['1.1.*']
-    ], 1, 1);
+    ], {
+      'beatsPerBar': 1,
+      'barsPerLoop': 1
+    });
     expect(result.length).to.equal(96);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[95][0]).to.equal('1.1.96');
@@ -105,7 +134,7 @@ describe('when using wildcard expression', function () {
   it('should repeat any bar, beat and tick', function () {
     var result = expr([
       ['*.*.*']
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(768);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[96][0]).to.equal('1.2.01');
@@ -119,7 +148,10 @@ describe('when using even/odd expression', function () {
   it('should repeat even bars', function () {
     var result = expr([
       ['even.2.45']
-    ], 4, 4);
+    ], {
+      'beatsPerBar': 4,
+      'barsPerLoop': 4
+    });
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('2.2.45');
     expect(result[1][0]).to.equal('4.2.45');
@@ -128,7 +160,10 @@ describe('when using even/odd expression', function () {
   it('should repeat odd bars', function () {
     var result = expr([
       ['odd.1.25']
-    ], 8, 4);
+    ], {
+      'beatsPerBar': 4,
+      'barsPerLoop': 8
+    });
     expect(result.length).to.equal(4);
     expect(result[0][0]).to.equal('1.1.25');
     expect(result[1][0]).to.equal('3.1.25');
@@ -139,7 +174,7 @@ describe('when using even/odd expression', function () {
   it('should repeat even beats', function () {
     var result = expr([
       ['1.even.10']
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('1.2.10');
     expect(result[1][0]).to.equal('1.4.10');
@@ -148,7 +183,7 @@ describe('when using even/odd expression', function () {
   it('should repeat odd beats', function () {
     var result = expr([
       ['1.odd.10']
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('1.1.10');
     expect(result[1][0]).to.equal('1.3.10');
@@ -157,7 +192,7 @@ describe('when using even/odd expression', function () {
   it('should repeat even bars and odd beats', function () {
     var result = expr([
       ['even.odd.10']
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(2);
     expect(result[0][0]).to.equal('2.1.10');
     expect(result[1][0]).to.equal('2.3.10');
@@ -166,7 +201,10 @@ describe('when using even/odd expression', function () {
   it('should repeat odd bars and even beats', function () {
     var result = expr([
       ['odd.even.10']
-    ], 4, 6);
+    ], {
+      'beatsPerBar': 6,
+      'barsPerLoop': 4
+    });
     expect(result.length).to.equal(6);
     expect(result[0][0]).to.equal('1.2.10');
     expect(result[1][0]).to.equal('1.4.10');
@@ -179,7 +217,10 @@ describe('when using even/odd expression', function () {
   it('should repeat even ticks', function () {
     var result = expr([
       ['1.1.even']
-    ], 1, 1);
+    ], {
+      'beatsPerBar': 1,
+      'barsPerLoop': 1
+    });
     expect(result.length).to.equal(48);
     expect(result[0][0]).to.equal('1.1.02');
     expect(result[47][0]).to.equal('1.1.96');
@@ -188,7 +229,10 @@ describe('when using even/odd expression', function () {
   it('should repeat odd ticks', function () {
     var result = expr([
       ['1.1.odd']
-    ], 1, 1);
+    ], {
+      'beatsPerBar': 1,
+      'barsPerLoop': 1
+    });
     expect(result.length).to.equal(48);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[47][0]).to.equal('1.1.95');
@@ -197,7 +241,7 @@ describe('when using even/odd expression', function () {
   it('should repeat even bars, odd beats and ticks', function () {
     var result = expr([
       ['even.odd.odd']
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(96);
     expect(result[0][0]).to.equal('2.1.01');
     expect(result[1][0]).to.equal('2.1.03');
@@ -286,7 +330,7 @@ describe('when using mixed expression', function () {
   it('should repeat every bar and even beats', function () {
     var result = expr([
       ['*.even.01']
-    ], 2, 4);
+    ], standardOptions);
     expect(result.length).to.equal(4);
     expect(result[0][0]).to.equal('1.2.01');
     expect(result[1][0]).to.equal('1.4.01');
@@ -297,8 +341,8 @@ describe('when using mixed expression', function () {
   it('should repeat every beat and odd ticks', function () {
     var result = expr([
       ['1.*.odd']
-    ], 2, 4);
-    
+    ], standardOptions);
+
     expect(result.length).to.equal(192);
     expect(result[0][0]).to.equal('1.1.01');
     expect(result[1][0]).to.equal('1.1.03');

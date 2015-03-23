@@ -14,14 +14,15 @@ $ npm install --save dilla-expressions
 
 ```javascript
 var expr = require('dilla-expressions');
-var barsPerLoop = 2;
-var beatsPerBar = 4;
 
 var notes = [
   ['*.even.01']
 ];
 
-var expanded = expr(notes, barsPerLoop, beatsPerBar);
+var expanded = expr(notes, {
+  'barsPerLoop': 2,
+  'beatsPerBar': 4
+});
 
 expect(expanded.length).to.equal(4);
 expect(expanded[0][0]).to.equal('1.2.01');
@@ -48,6 +49,8 @@ expect(expanded[3][0]).to.equal('2.4.01');
   - Initial release with wildcard (```*```), ```even``` and ```odd``` expression operators
 - **1.0.1**
   - CHANGED: *events* are now called *notes* [dilla/8](https://github.com/adamrenklint/dilla/issues/8)
+- **1.1.0**
+  - CHANGED: expects options object instead of barsPerLoop and beatsPerBar separately [#4](https://github.com/adamrenklint/dilla-expressions/issues/4)
 
 ## License
 

@@ -47,17 +47,18 @@ function makeExpressionFunction (expression) {
   };
 }
 
-function expressions (notes, barsPerLoop, beatsPerBar) {
+function expressions (notes, options) {
 
   if (!notes) throw new Error('Invalid "notes" array');
-  if (!barsPerLoop || typeof barsPerLoop !== 'number') throw new Error('Invalid "barsPerLoop" argument');
-  if (!beatsPerBar || typeof beatsPerBar !== 'number') throw new Error('Invalid "barsPerLoop" argument');
+  if (!options || typeof options !== 'object') throw new Error('Invalid "options" object');
+  if (typeof options.beatsPerBar !== 'number' || options.beatsPerBar < 0) throw new Error('Invalid options: beatsPerBar is not a valid number');
+  if (typeof options.barsPerLoop !== 'number' || options.barsPerLoop < 0) throw new Error('Invalid options: barsPerLoop is not a valid number');
 
-  var possibles = getPossiblePositions(barsPerLoop, beatsPerBar);
+  var possibles = getPossiblePositions(options.barsPerLoop, options.beatsPerBar);
   var all = [];
 
   notes.forEach(function (event) {
-    
+
     var position = event[0];
     if (isPlainPosition(position)) return all.push(event);
 
