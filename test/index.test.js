@@ -2,54 +2,54 @@ var chai = require('chai');
 var expect = chai.expect;
 var expr = require('../index');
 
-// describe('when events is not defined', function () {
-//   it('should throw an error', function () {
-//     expect(function () {
-//       expr();
-//     }).to.throw(Error);
-//   })
-// });
-//
-//
-// describe('when options is not defined', function () {
-//   it('should throw an error', function () {
-//     expect(function () {
-//       expr([
-//         ['1.1.01', 1, {}],
-//         ['2.4.01', 2, {}]
-//       ]);
-//     }).to.throw(Error);
-//   });
-// });
-//
-// describe('when options is an object', function () {
-//   describe('when options.barsPerLoop is not a number', function () {
-//     it('should throw an error', function () {
-//       expect(function () {
-//         expr([
-//           ['1.1.01', 1, {}],
-//           ['2.4.01', 2, {}]
-//         ], {
-//           'beatsPerBar': 4
-//         });
-//       }).to.throw(Error);
-//     });
-//   });
-//   describe('when options.beatsPerBar is not a number', function () {
-//     it('should throw an error', function () {
-//       expect(function () {
-//         expr([
-//           ['1.1.01', 1, {}],
-//           ['2.4.01', 2, {}]
-//         ], {
-//           'barsPerLoop': 2,
-//           'beatsPerBar': 'foo'
-//         });
-//       }).to.throw(Error);
-//     });
-//   });
-// });
-//
+describe('when events is not defined', function () {
+  it('should throw an error', function () {
+    expect(function () {
+      expr();
+    }).to.throw(Error);
+  })
+});
+
+
+describe('when options is not defined', function () {
+  it('should throw an error', function () {
+    expect(function () {
+      expr([
+        ['1.1.01', 1, {}],
+        ['2.4.01', 2, {}]
+      ]);
+    }).to.throw(Error);
+  });
+});
+
+describe('when options is an object', function () {
+  describe('when options.barsPerLoop is not a number', function () {
+    it('should throw an error', function () {
+      expect(function () {
+        expr([
+          ['1.1.01', 1, {}],
+          ['2.4.01', 2, {}]
+        ], {
+          'beatsPerBar': 4
+        });
+      }).to.throw(Error);
+    });
+  });
+  describe('when options.beatsPerBar is not a number', function () {
+    it('should throw an error', function () {
+      expect(function () {
+        expr([
+          ['1.1.01', 1, {}],
+          ['2.4.01', 2, {}]
+        ], {
+          'barsPerLoop': 2,
+          'beatsPerBar': 'foo'
+        });
+      }).to.throw(Error);
+    });
+  });
+});
+
 var standardOptions = {
   'beatsPerBar': 4,
   'barsPerLoop': 2
