@@ -36,6 +36,19 @@ expect(expanded[3][0]).to.equal('2.4.01');
 - ```*```
 - ```even```
 - ```odd```
+- ```% (modulus)```
+
+### Examples
+
+#### Modulus
+
+```js
+> "1.%3.%30"
+= "1.1.01", "1.1.31", "1.1.61", "1.1.91", "1.4.01", "1.4.31", "1.4.61", "1.4.91"
+
+> "1.1.5%20"
+= "1.1.05", "1.1.25", "1.1.45", "1.1.65", "1.1.85"
+```
 
 ## Custom matchers
 
@@ -44,9 +57,8 @@ It is possible to add a custom *matcher callback*, a function which gets execute
 The stack of matchers will continue to execute until a position has been accepted or until the stack ends.
 
 ```js
-expr.addMatcher(function (position, fragments) {
-  if (position === '1.1.45') return true;
-  if (fragments[0] === 1 && fragments[2] === 96) return true;
+expr.addMatcher(function (exprFragments, posFragments) {
+  if (posFragments[2] === 45) return true;
   return false;
 });
 ```
@@ -66,6 +78,7 @@ expr.addMatcher(function (position, fragments) {
 - **1.1.0**
   - CHANGED: expects options object instead of barsPerLoop and beatsPerBar separately [#4](https://github.com/adamrenklint/dilla-expressions/issues/4)
   - NEW: possible to add custom matcher callback [#3](https://github.com/adamrenklint/dilla-expressions/issues/3)
+  - NEW: modulus operator [#1](https://github.com/adamrenklint/dilla-expressions/issues/1)
 
 ## License
 

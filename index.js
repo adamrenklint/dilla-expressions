@@ -21,7 +21,7 @@ function getPossiblePositions (barsPerLoop, beatsPerBar) {
 function getFragments (position) {
   return position.split('.').map(function (fragment) {
     var fragmentNumber = parseInt(fragment, 10);
-    if (!isNaN(fragmentNumber)) return fragmentNumber;
+    if (fragment.match(/^\d+$/) && !isNaN(fragmentNumber)) return fragmentNumber;
     return fragment;
   });
 }
@@ -35,6 +35,7 @@ function addMatcher (matcher) {
 
 function makeExpressionFunction (expression) {
   var exprFragments = getFragments(expression);
+  // console.log(exprFragments, expression)
   return function expressionFn (position) {
     var positionFragments = getFragments(position);
     var valid = true;
@@ -44,9 +45,16 @@ function makeExpressionFunction (expression) {
       if (exprFragment === 'odd' && positionFragments[index] % 2 === 1) return;
       if (exprFragment === '*') return;
 
-      // if (typeof exprFragment === 'string' && exprFragment.indexOf('%') >= 0) {
-        // console.log('deal with modulus', exprFragment, positionFragments[index])
-      // }
+      // console.log('foo', exprFragment, typeof exprFragment);
+      if (typeof exprFragment === 'string' && exprFragment.indexOf('%') >= 0) {
+        // console.log(exprFragment)
+
+        var nums = exprFragment.split('%');
+        var offset = parseInt(nums[0] || 1, 10);
+        var mod = parseInt(nums[1], 10);
+        var res = (positionFragments[index] - offset) % mod;
+        if (!res) return;
+      }
       // position is invalid, break out early
       // console.log('>', position, positionFragments);
       valid = false;
@@ -57,7 +65,7 @@ function makeExpressionFunction (expression) {
     var matcher;
     while (!valid && _matchers.length) {
       matcher = _matchers.shift();
-      if (matcher(position, positionFragments)) {
+      if (matcher(exprFragments, positionFragments)) {
         valid = true;
       }
     }
