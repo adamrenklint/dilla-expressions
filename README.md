@@ -91,7 +91,7 @@ expr.addMatcher(function (exprFragments, posFragments) {
   - CHANGED: expects options object instead of barsPerLoop and beatsPerBar separately [#4](https://github.com/adamrenklint/dilla-expressions/issues/4)
   - NEW: possible to add custom matcher callback [#3](https://github.com/adamrenklint/dilla-expressions/issues/3)
   - NEW: modulus operator [#1](https://github.com/adamrenklint/dilla-expressions/issues/1)
-- **1.1.1**
+- **1.1.2**
   - FIXED: ```1.2%1.01``` expression would incorrectly match ```1.1.01```
 
 ## License
