@@ -250,83 +250,91 @@ describe('when using even/odd expression', function () {
   });
 });
 
-describe('when using modulus expression', function () {
-
-  describe('when no starting point is defined', function () {
-    it('should start from 1 and modulate every {n} ticks', function () {
-      var result = expr([
-        ['1.1.%30']
-      ], {
-        'beatsPerBar': 1,
-        'barsPerLoop': 1
-      });
-      expect(result.length).to.equal(4);
-      expect(result[0][0]).to.equal('1.1.01');
-      expect(result[1][0]).to.equal('1.1.31');
-      expect(result[2][0]).to.equal('1.1.61');
-      expect(result[3][0]).to.equal('1.1.91');
+describe('when no starting point is defined', function () {
+  it('should start from 1 and modulate every {n} ticks', function () {
+    var result = expr([
+      ['1.1.%30']
+    ], {
+      'beatsPerBar': 1,
+      'barsPerLoop': 1
     });
-
-    it('should start from 1 and modulate every {n} beats', function () {
-      var result = expr([
-        ['1.%3.01']
-      ], {
-        'beatsPerBar': 4,
-        'barsPerLoop': 1
-      });
-      expect(result.length).to.equal(2);
-      expect(result[0][0]).to.equal('1.1.01');
-      expect(result[1][0]).to.equal('1.4.01');
-    });
-
-    it('should start from 1 and modulate every {n} beats and ticks', function () {
-      var result = expr([
-        ['1.%3.%30']
-      ], {
-        'beatsPerBar': 4,
-        'barsPerLoop': 1
-      });
-      expect(result.length).to.equal(8);
-      expect(result[0][0]).to.equal('1.1.01');
-      expect(result[1][0]).to.equal('1.1.31');
-      expect(result[2][0]).to.equal('1.1.61');
-      expect(result[3][0]).to.equal('1.1.91');
-      expect(result[4][0]).to.equal('1.4.01');
-      expect(result[5][0]).to.equal('1.4.31');
-      expect(result[6][0]).to.equal('1.4.61');
-      expect(result[7][0]).to.equal('1.4.91');
-    });
+    expect(result.length).to.equal(4);
+    expect(result[0][0]).to.equal('1.1.01');
+    expect(result[1][0]).to.equal('1.1.31');
+    expect(result[2][0]).to.equal('1.1.61');
+    expect(result[3][0]).to.equal('1.1.91');
   });
 
-  describe('when a starting point is defined', function () {
-
-    it('should start from it and modulate every {n} ticks', function () {
-      var result = expr([
-        ['1.1.5%20']
-      ], {
-        'beatsPerBar': 1,
-        'barsPerLoop': 1
-      });
-      expect(result.length).to.equal(5);
-      expect(result[0][0]).to.equal('1.1.05');
-      expect(result[1][0]).to.equal('1.1.25');
-      expect(result[2][0]).to.equal('1.1.45');
-      expect(result[3][0]).to.equal('1.1.65');
-      expect(result[4][0]).to.equal('1.1.85');
+  it('should start from 1 and modulate every {n} beats', function () {
+    var result = expr([
+      ['1.%3.01']
+    ], {
+      'beatsPerBar': 4,
+      'barsPerLoop': 1
     });
+    expect(result.length).to.equal(2);
+    expect(result[0][0]).to.equal('1.1.01');
+    expect(result[1][0]).to.equal('1.4.01');
+  });
 
-    it('should start from it and modulate every {n} beats', function () {
-      var result = expr([
-        ['1.2%3.01']
-      ], {
-        'beatsPerBar': 10,
-        'barsPerLoop': 1
-      });
-      expect(result.length).to.equal(3);
-      expect(result[0][0]).to.equal('1.2.01');
-      expect(result[1][0]).to.equal('1.5.01');
-      expect(result[2][0]).to.equal('1.8.01');
+  it('should start from 1 and modulate every {n} beats and ticks', function () {
+    var result = expr([
+      ['1.%3.%30']
+    ], {
+      'beatsPerBar': 4,
+      'barsPerLoop': 1
     });
+    expect(result.length).to.equal(8);
+    expect(result[0][0]).to.equal('1.1.01');
+    expect(result[1][0]).to.equal('1.1.31');
+    expect(result[2][0]).to.equal('1.1.61');
+    expect(result[3][0]).to.equal('1.1.91');
+    expect(result[4][0]).to.equal('1.4.01');
+    expect(result[5][0]).to.equal('1.4.31');
+    expect(result[6][0]).to.equal('1.4.61');
+    expect(result[7][0]).to.equal('1.4.91');
+  });
+});
+
+describe('when a starting point is defined', function () {
+
+  it('should start from it and modulate every {n} ticks', function () {
+    var result = expr([
+      ['1.1.5%20']
+    ], {
+      'beatsPerBar': 1,
+      'barsPerLoop': 1
+    });
+    expect(result.length).to.equal(5);
+    expect(result[0][0]).to.equal('1.1.05');
+    expect(result[1][0]).to.equal('1.1.25');
+    expect(result[2][0]).to.equal('1.1.45');
+    expect(result[3][0]).to.equal('1.1.65');
+    expect(result[4][0]).to.equal('1.1.85');
+  });
+
+  it('should start from it and modulate every {n} beats', function () {
+    var result = expr([
+      ['1.2%2.01']
+    ], {
+      'beatsPerBar': 4,
+      'barsPerLoop': 1
+    });
+    expect(result.length).to.equal(2);
+    expect(result[0][0]).to.equal('1.2.01');
+    expect(result[1][0]).to.equal('1.4.01');
+  });
+  it('should work with modulus 1, i.e. each after offset', function () {
+    var result = expr([
+      ['1.2%1.01']
+    ], {
+      'beatsPerBar': 4,
+      'barsPerLoop': 1
+    });
+    expect(result.length).to.equal(3);
+    expect(result[0][0]).to.equal('1.2.01');
+    expect(result[1][0]).to.equal('1.3.01');
+    expect(result[2][0]).to.equal('1.4.01');
   });
 });
 
