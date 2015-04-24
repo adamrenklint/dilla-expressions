@@ -60,6 +60,20 @@ expect(expanded[3][0]).to.equal('2.4.01');
 = "1.1.05", "1.1.25", "1.1.45", "1.1.65", "1.1.85"
 ```
 
+### Greater than
+
+```js
+> "1.>2.01"
+= "1.3.01", "1.4.01"
+```
+
+### Less than
+
+```js
+> "1.<4.01"
+= "1.1.01", "1.2.01", "1.3.01"
+```
+
 ## Custom matchers
 
 It is possible to add a custom *matcher callback*, a function which gets executed for each possible position within the range.
@@ -93,6 +107,8 @@ expr.addMatcher(function (exprFragments, posFragments) {
   - NEW: modulus operator [#1](https://github.com/adamrenklint/dilla-expressions/issues/1)
 - **1.1.2**
   - FIXED: ```1.2%1.01``` expression would incorrectly match ```1.1.01```
+- **1.2.0**
+  - NEW: greater than and less than operators
 
 ## License
 

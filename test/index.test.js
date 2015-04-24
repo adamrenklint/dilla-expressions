@@ -66,7 +66,7 @@ describe('when no expression is used', function () {
     expect(result[1][0]).to.equal('2.4.01');
   });
 });
-//
+
 describe('when using wildcard expression', function () {
 
   it('should repeat any bar', function () {
@@ -338,14 +338,49 @@ describe('when a starting point is defined', function () {
   });
 });
 
-/*
+describe('when "less than" and "greater than" expressions', function () {
 
-1.1.>40
-,2,4
+  describe('when only "greater than" is defined', function () {
+    it('should exclude less or same values', function () {
+      var result = expr([
+        ['1.>2.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(2);
+      expect(result[0][0]).to.equal('1.3.01');
+      expect(result[1][0]).to.equal('1.4.01');
+    })
+  });
 
-  = 1.1.1, 1.1.41, 1.1.81, 1.2.05, 1.2.45...
+  describe('when only "less than" is defined', function () {
+    it('should exclude greater or same values', function () {
+      var result = expr([
+        ['1.<3.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(2);
+      expect(result[0][0]).to.equal('1.1.01');
+      expect(result[1][0]).to.equal('1.2.01');
+    })
+  });
 
-*/
+  describe('when both expressions are used', function () {
+    it('should only match values in between', function () {
+      var result = expr([
+        ['1.>1<3.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(1);
+      expect(result[0][0]).to.equal('1.2.01');
+    })
+  });
+});
 
 describe('when using mixed expression', function () {
 
@@ -375,20 +410,45 @@ describe('when using mixed expression', function () {
     expect(result[191][0]).to.equal('1.4.95');
   });
 
-  // it('should repeat odd bars, every beat and modulate every {n} ticks', function () {
-  //   var result = expr([
-  //     ['odd.*.%30']
-  //   ], 2, 2);
-  //   expect(result.length).to.equal(8);
-  //   expect(result[0][0]).to.equal('1.1.1');
-  //   expect(result[1][0]).to.equal('1.1.31');
-  //   expect(result[2][0]).to.equal('1.1.61');
-  //   expect(result[3][0]).to.equal('1.1.91');
-  //   expect(result[4][0]).to.equal('1.2.1');
-  //   expect(result[5][0]).to.equal('1.2.31');
-  //   expect(result[6][0]).to.equal('1.2.61');
-  //   expect(result[7][0]).to.equal('1.2.91');
-  // });
+  describe('when odd is combined with greater than', function () {
+    it('should only match odd values above', function () {
+      var result = expr([
+        ['1.odd>1.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(1);
+      expect(result[0][0]).to.equal('1.3.01');
+    })
+  });
+  describe('when even is combined with less than', function () {
+    it('should only match even values below', function () {
+      var result = expr([
+        ['1.even<4.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(1);
+      expect(result[0][0]).to.equal('1.2.01');
+    })
+  });
+
+  describe('when modulus is combined with less and greater than', function () {
+    it('should only match the modulated values between', function () {
+      var result = expr([
+        ['1.%3>4<15.01']
+      ], {
+        'beatsPerBar': 20,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(3);
+      expect(result[0][0]).to.equal('1.10.01');
+      expect(result[1][0]).to.equal('1.13.01');
+      expect(result[2][0]).to.equal('1.7.01');
+    });
+  });
 });
 
 describe('addMatcher (matcher)', function () {

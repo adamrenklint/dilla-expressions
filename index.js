@@ -33,6 +33,9 @@ function addMatcher (matcher) {
   matchers.push(matcher);
 }
 
+var gtRe = />(\d+)/;
+var ltRe = /<(\d+)/;
+
 function makeExpressionFunction (expression) {
   var exprFragments = getFragments(expression);
   // console.log(exprFragments, expression)
@@ -41,6 +44,26 @@ function makeExpressionFunction (expression) {
     var valid = true;
     exprFragments.some(function (exprFragment, index) {
       if (typeof exprFragment === 'number' && positionFragments[index] === exprFragment) return;
+      exprFragment = '' + exprFragment;
+
+      if (ltRe.test(exprFragment)) {
+        var val = exprFragment.match(ltRe)[1];
+        exprFragment = exprFragment.replace(ltRe, '') || '*';
+        if (positionFragments[index] >= val) {
+          valid = false;
+          return true;
+        }
+      }
+
+      if (gtRe.test(exprFragment)) {
+        var val = exprFragment.match(gtRe)[1];
+        exprFragment = exprFragment.replace(gtRe, '') || '*';
+        if (positionFragments[index] <= val) {
+          valid = false;
+          return true;
+        }
+      }
+
       if (exprFragment === 'even' && positionFragments[index] % 2 === 0) return;
       if (exprFragment === 'odd' && positionFragments[index] % 2 === 1) return;
       if (exprFragment === '*') return;

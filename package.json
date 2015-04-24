@@ -1,6 +1,6 @@
 {
   "name": "dilla-expressions",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "expand expressions for repeating notes into flat positions",
   "main": "index.js",
   "scripts": {
