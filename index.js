@@ -47,18 +47,18 @@ function makeExpressionFunction (expression) {
       exprFragment = '' + exprFragment;
 
       if (ltRe.test(exprFragment)) {
-        var val = exprFragment.match(ltRe)[1];
+        var ltVal = exprFragment.match(ltRe)[1];
         exprFragment = exprFragment.replace(ltRe, '') || '*';
-        if (positionFragments[index] >= val) {
+        if (positionFragments[index] >= ltVal) {
           valid = false;
           return true;
         }
       }
 
       if (gtRe.test(exprFragment)) {
-        var val = exprFragment.match(gtRe)[1];
+        var gtVal = exprFragment.match(gtRe)[1];
         exprFragment = exprFragment.replace(gtRe, '') || '*';
-        if (positionFragments[index] <= val) {
+        if (positionFragments[index] <= gtVal) {
           valid = false;
           return true;
         }
