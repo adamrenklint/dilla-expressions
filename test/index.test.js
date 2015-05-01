@@ -420,9 +420,9 @@ describe('when using mixed expression', function () {
         'barsPerLoop': 1
       });
       expect(result.length).to.equal(3);
-      expect(result[0][0]).to.equal('1.10.01');
-      expect(result[1][0]).to.equal('1.13.01');
-      expect(result[2][0]).to.equal('1.7.01');
+      expect(result[0][0]).to.equal('1.7.01');
+      expect(result[1][0]).to.equal('1.10.01');
+      expect(result[2][0]).to.equal('1.13.01');
     });
   });
 });

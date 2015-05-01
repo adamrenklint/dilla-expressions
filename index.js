@@ -13,22 +13,6 @@ var isPlainPosition = memoize(function (position) {
   return !!position.match(/^\d+\.\d+\.\d+$/);
 });
 
-// var getPossiblePositions = memoize(function (barsPerLoop, beatsPerBar) {
-//   var possibles = [];
-//   var bar = 0, beat, tick, displayTick;
-//   while (++bar <= barsPerLoop) {
-//     beat = 0;
-//     while (++beat <= beatsPerBar) {
-//       tick = 0;
-//       while (++tick <= 96) {
-//         displayTick = tick < 10 ? '0' + tick : tick;
-//         possibles.push([bar, beat, displayTick].join('.'));
-//       }
-//     }
-//   }
-//   return possibles;
-// }, hashArgs);
-
 var getFragments = memoize(function  (position) {
   return position.split('.').map(function (fragment) {
     var fragmentNumber = parseInt(fragment, 10);
@@ -37,93 +21,23 @@ var getFragments = memoize(function  (position) {
   });
 });
 
-// var matchers = [];
-
-// function addMatcher (matcher) {
-//   if (!matcher || typeof matcher !== 'function') throw new Error('Invalid argument: matcher is not a function');
-//   matchers.push(matcher);
-// }
-
-// var gtRe = />(\d+)/;
-// var ltRe = /<(\d+)/;
-// var plain
-//
-// var makeExpressionFunction = memoize(function  (expression) {
-//   var exprFragments = getFragments(expression);
-//   return memoize(function (position) {
-//     var positionFragments = getFragments(position);
-//     var valid = true;
-//     exprFragments.some(function (exprFragment, index) {
-//       if (typeof exprFragment === 'number' && positionFragments[index] === exprFragment) return;
-//       // console.log('>', positionFragments[index], index, exprFragment);
-//       exprFragment = '' + exprFragment;
-//
-//       if (ltRe.test(exprFragment)) {
-//         var ltVal = exprFragment.match(ltRe)[1];
-//         exprFragment = exprFragment.replace(ltRe, '') || '*';
-//         if (positionFragments[index] >= ltVal) {
-//           valid = false;
-//           return true;
-//         }
-//       }
-//
-//       if (gtRe.test(exprFragment)) {
-//         var gtVal = exprFragment.match(gtRe)[1];
-//         exprFragment = exprFragment.replace(gtRe, '') || '*';
-//         if (positionFragments[index] <= gtVal) {
-//           valid = false;
-//           return true;
-//         }
-//       }
-//
-//       if (exprFragment === 'even' && positionFragments[index] % 2 === 0) return;
-//       if (exprFragment === 'odd' && positionFragments[index] % 2 === 1) return;
-//       if (exprFragment === '*') return;
-//
-//       if (typeof exprFragment === 'string' && exprFragment.indexOf('%') >= 0) {
-//         var nums = exprFragment.split('%');
-//         var offset = parseInt(nums[0] || 1, 10);
-//         var mod = parseInt(nums[1], 10);
-//         var value = positionFragments[index] - offset;
-//         if (mod === 1) {
-//           if (value >= 0) return;
-//         }
-//         else {
-//           var res = value % mod;
-//           if (!res) return;
-//         }
-//       }
-//       // position is invalid, break out early
-//       valid = false;
-//       return true;
-//     });
-//
-//     var _matchers = matchers.slice();
-//     var matcher;
-//     while (!valid && _matchers.length) {
-//       matcher = _matchers.shift();
-//       if (matcher(exprFragments, positionFragments)) {
-//         valid = true;
-//       }
-//     }
-//     return valid;
-//   });
-// });
-
-var skipInRange = memoize(function (limit, offset, step) {
+var skipInRange = memoize(function (min, limit, offset, step) {
   var all = [];
   while (offset <= limit) {
-    all.push(offset);
+    if (offset > min) {
+      all.push(offset);
+    }
     offset += step;
   }
   return all;
 }, serializeArgs);
 
-var getRange = memoize(function (limit) {
+var getRange = memoize(function (start, limit) {
   var all = [];
-  var i = 0;
-  while (i++ < limit) {
+  var i = start;
+  while (i <= limit) {
     all.push(i);
+    i++;
   }
   return all;
 }, hashArgs);
@@ -134,12 +48,35 @@ var filterModulus = memoize(function  (range, mod, res) {
   });
 }, hashArgs);
 
+var gtRe = />(\d+)/;
+var ltRe = /<(\d+)/;
+
 function expandToTree (fragment, tree, limit) {
-  var range = getRange(limit);
+  var start = 1;
+
   if (/^\d+$/.test(fragment)) {
     tree[fragment] = {};
+    return;
   }
-  else if (fragment === '*') {
+
+  var gtMatch = 0, ltMatch = 0;
+
+  if (gtMatch = fragment.match(gtRe)) {
+    gtMatch = gtMatch && parseInt(gtMatch[1], 10);
+    start = gtMatch + 1;
+    fragment = fragment.replace(gtRe, '');
+  }
+
+  if (ltMatch = fragment.match(ltRe)) {
+    ltMatch = ltMatch && parseInt(ltMatch[1], 10);
+    limit = ltMatch - 1;
+    fragment = fragment.replace(ltRe, '');
+  }
+
+  var range = getRange(start, limit);
+
+  // start new chain here, in case range was changed by gt/lt
+  if (!fragment || fragment === '*') {
     range.forEach(function (n) {
       tree[n] = {};
     });
@@ -151,10 +88,10 @@ function expandToTree (fragment, tree, limit) {
     });
   }
   else if (typeof fragment === 'string' && ~fragment.indexOf('%')) {
-    var pieces = fragment.split('%')
+    var pieces = fragment.split('%');
     var offset = pieces[0] && parseInt(pieces[0], 10) || 1;
     var step = parseInt(pieces[1], 10);
-    skipInRange(limit, offset, step).forEach(function (n) {
+    skipInRange(gtMatch, limit, offset, step).forEach(function (n) {
       tree[n] = {};
     });
   }
@@ -169,7 +106,7 @@ function flattenTree (tree) {
         all.push([bar, beat, tick].join('.'));
       });
     });
-  })
+  });
   return all;
 }
 
