@@ -145,8 +145,6 @@ describe('when using wildcard expression', function () {
 
 describe('when using even/odd expression', function () {
 
-
-
   it('should repeat even beats', function () {
     var result = expr([
       ['1.even.10']
@@ -226,95 +224,97 @@ describe('when using even/odd expression', function () {
   });
 });
 
-describe('when no starting point is defined', function () {
-  it('should start from 1 and modulate every {n} ticks', function () {
-    var result = expr([
-      ['1.1.%30']
-    ], {
-      'beatsPerBar': 1,
-      'barsPerLoop': 1
+describe('when using modulus expression', function () {
+  describe('when no starting point is defined', function () {
+    it('should start from 1 and modulate every {n} ticks', function () {
+      var result = expr([
+        ['1.1.%30']
+      ], {
+        'beatsPerBar': 1,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(4);
+      expect(result[0][0]).to.equal('1.1.01');
+      expect(result[1][0]).to.equal('1.1.31');
+      expect(result[2][0]).to.equal('1.1.61');
+      expect(result[3][0]).to.equal('1.1.91');
     });
-    expect(result.length).to.equal(4);
-    expect(result[0][0]).to.equal('1.1.01');
-    expect(result[1][0]).to.equal('1.1.31');
-    expect(result[2][0]).to.equal('1.1.61');
-    expect(result[3][0]).to.equal('1.1.91');
+
+    it('should start from 1 and modulate every {n} beats', function () {
+      var result = expr([
+        ['1.%3.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(2);
+      expect(result[0][0]).to.equal('1.1.01');
+      expect(result[1][0]).to.equal('1.4.01');
+    });
+
+    it('should start from 1 and modulate every {n} beats and ticks', function () {
+      var result = expr([
+        ['1.%3.%30']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(8);
+      expect(result[0][0]).to.equal('1.1.01');
+      expect(result[1][0]).to.equal('1.1.31');
+      expect(result[2][0]).to.equal('1.1.61');
+      expect(result[3][0]).to.equal('1.1.91');
+      expect(result[4][0]).to.equal('1.4.01');
+      expect(result[5][0]).to.equal('1.4.31');
+      expect(result[6][0]).to.equal('1.4.61');
+      expect(result[7][0]).to.equal('1.4.91');
+    });
   });
 
-  it('should start from 1 and modulate every {n} beats', function () {
-    var result = expr([
-      ['1.%3.01']
-    ], {
-      'beatsPerBar': 4,
-      'barsPerLoop': 1
-    });
-    expect(result.length).to.equal(2);
-    expect(result[0][0]).to.equal('1.1.01');
-    expect(result[1][0]).to.equal('1.4.01');
-  });
+  describe('when a starting point is defined', function () {
 
-  it('should start from 1 and modulate every {n} beats and ticks', function () {
-    var result = expr([
-      ['1.%3.%30']
-    ], {
-      'beatsPerBar': 4,
-      'barsPerLoop': 1
+    it('should start from it and modulate every {n} ticks', function () {
+      var result = expr([
+        ['1.1.5%20']
+      ], {
+        'beatsPerBar': 1,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(5);
+      expect(result[0][0]).to.equal('1.1.05');
+      expect(result[1][0]).to.equal('1.1.25');
+      expect(result[2][0]).to.equal('1.1.45');
+      expect(result[3][0]).to.equal('1.1.65');
+      expect(result[4][0]).to.equal('1.1.85');
     });
-    expect(result.length).to.equal(8);
-    expect(result[0][0]).to.equal('1.1.01');
-    expect(result[1][0]).to.equal('1.1.31');
-    expect(result[2][0]).to.equal('1.1.61');
-    expect(result[3][0]).to.equal('1.1.91');
-    expect(result[4][0]).to.equal('1.4.01');
-    expect(result[5][0]).to.equal('1.4.31');
-    expect(result[6][0]).to.equal('1.4.61');
-    expect(result[7][0]).to.equal('1.4.91');
+
+    it('should start from it and modulate every {n} beats', function () {
+      var result = expr([
+        ['1.2%2.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(2);
+      expect(result[0][0]).to.equal('1.2.01');
+      expect(result[1][0]).to.equal('1.4.01');
+    });
+    it('should work with modulus 1, i.e. each after offset', function () {
+      var result = expr([
+        ['1.2%1.01']
+      ], {
+        'beatsPerBar': 4,
+        'barsPerLoop': 1
+      });
+      expect(result.length).to.equal(3);
+      expect(result[0][0]).to.equal('1.2.01');
+      expect(result[1][0]).to.equal('1.3.01');
+      expect(result[2][0]).to.equal('1.4.01');
+    });
   });
 });
 
-describe('when a starting point is defined', function () {
-
-  it('should start from it and modulate every {n} ticks', function () {
-    var result = expr([
-      ['1.1.5%20']
-    ], {
-      'beatsPerBar': 1,
-      'barsPerLoop': 1
-    });
-    expect(result.length).to.equal(5);
-    expect(result[0][0]).to.equal('1.1.05');
-    expect(result[1][0]).to.equal('1.1.25');
-    expect(result[2][0]).to.equal('1.1.45');
-    expect(result[3][0]).to.equal('1.1.65');
-    expect(result[4][0]).to.equal('1.1.85');
-  });
-
-  it('should start from it and modulate every {n} beats', function () {
-    var result = expr([
-      ['1.2%2.01']
-    ], {
-      'beatsPerBar': 4,
-      'barsPerLoop': 1
-    });
-    expect(result.length).to.equal(2);
-    expect(result[0][0]).to.equal('1.2.01');
-    expect(result[1][0]).to.equal('1.4.01');
-  });
-  it('should work with modulus 1, i.e. each after offset', function () {
-    var result = expr([
-      ['1.2%1.01']
-    ], {
-      'beatsPerBar': 4,
-      'barsPerLoop': 1
-    });
-    expect(result.length).to.equal(3);
-    expect(result[0][0]).to.equal('1.2.01');
-    expect(result[1][0]).to.equal('1.3.01');
-    expect(result[2][0]).to.equal('1.4.01');
-  });
-});
-
-describe('when "less than" and "greater than" expressions', function () {
+describe('when using "less than" and "greater than" expressions', function () {
 
   describe('when only "greater than" is defined', function () {
     it('should exclude less or same values', function () {
@@ -427,113 +427,113 @@ describe('when using mixed expression', function () {
   });
 });
 
-describe('addMatcher (matcher)', function () {
-  describe('when matcher is not a function', function () {
-    it('should throw an error', function () {
-      expect(function () {
-        expr.addMatcher();
-      }).to.throw(Error);
-      expect(function () {
-        expr.addMatcher('foo');
-      }).to.throw(Error);
-      expect(function () {
-        expr.addMatcher(1323);
-      }).to.throw(Error);
-      expect(function () {
-        expr.addMatcher({'pos': '1.1.01' });
-      }).to.throw(Error);
-      expect(function () {
-        expr.addMatcher(['1.1.1.1.1']);
-      }).to.throw(Error);
-    });
-  });
-
-  describe('when matcher is a function', function () {
-    it('should execute the matcher for each possible note', function () {
-      var count = 0;
-      var last = null;
-      expr.addMatcher(function (exprFragments, posFragments) {
-        count++;
-        last = posFragments.join('.');
-      });
-      expr([
-        ['1.1.*']
-      ], standardOptions);
-      expect(count).to.equal(672);
-      expect(last).to.equal('2.4.96');
-    });
-    describe('when matcher returns false', function () {
-      describe('when another rule matches', function () {
-        it('should include the note', function () {
-          expr.addMatcher(function (exprFragments, posFragments) {
-            if (posFragments.join('.') === '1.1.3') return false;
-          });
-          var result = expr([
-            ['1.1.odd']
-          ], standardOptions);
-          var found = result.filter(function (res) {
-            return res[0] === '1.1.03';
-          });
-          expect(found.length).to.equal(1);
-        });
-      });
-      describe('when no other rule matches', function () {
-        it('should not include the note', function () {
-          expr.addMatcher(function (exprFragments, posFragments) {
-            if (posFragments.join('.') === '1.1.2') return false;
-          });
-          var result = expr([
-            ['1.1.odd']
-          ], standardOptions);
-          var found = result.filter(function (res) {
-            return res[0] === '1.1.02';
-          });
-          expect(found.length).to.equal(0);
-        });
-      });
-    });
-    describe('when matcher returns true', function () {
-      describe('when a previous rule matches', function () {
-        it('should include the note', function () {
-          expr.addMatcher(function (exprFragments, posFragments) {
-            if (posFragments.join('.') === '1.1.5') return true;
-          });
-          var result = expr([
-            ['1.1.odd']
-          ], standardOptions);
-          var found = result.filter(function (res) {
-            return res[0] === '1.1.05';
-          });
-          expect(found.length).to.equal(1);
-        });
-        it('should not execute matcher', function () {
-          var count = 0;
-          expr.addMatcher(function (exprFragments, posFragments) {
-            return true;
-          });
-          expr.addMatcher(function (exprFragments, posFragments) {
-            count++;
-          });
-          var result = expr([
-            ['1.1.*']
-          ], standardOptions);
-          expect(count).to.equal(0);
-        });
-      });
-      describe('when no other rule matches', function () {
-        it('should include the note', function () {
-          expr.addMatcher(function (exprFragments, posFragments) {
-            if (posFragments.join('.') === '1.1.4') return true;
-          });
-          var result = expr([
-            ['1.1.foo']
-          ], standardOptions);
-          var found = result.filter(function (res) {
-            return res[0] === '1.1.04';
-          });
-          expect(found.length).to.equal(1);
-        });
-      });
-    });
-  });
-});
+// describe('addMatcher (matcher)', function () {
+//   describe('when matcher is not a function', function () {
+//     it('should throw an error', function () {
+//       expect(function () {
+//         expr.addMatcher();
+//       }).to.throw(Error);
+//       expect(function () {
+//         expr.addMatcher('foo');
+//       }).to.throw(Error);
+//       expect(function () {
+//         expr.addMatcher(1323);
+//       }).to.throw(Error);
+//       expect(function () {
+//         expr.addMatcher({'pos': '1.1.01' });
+//       }).to.throw(Error);
+//       expect(function () {
+//         expr.addMatcher(['1.1.1.1.1']);
+//       }).to.throw(Error);
+//     });
+//   });
+//
+//   describe('when matcher is a function', function () {
+//     it('should execute the matcher for each possible note', function () {
+//       var count = 0;
+//       var last = null;
+//       expr.addMatcher(function (exprFragments, posFragments) {
+//         count++;
+//         last = posFragments.join('.');
+//       });
+//       expr([
+//         ['1.1.*']
+//       ], standardOptions);
+//       expect(count).to.equal(672);
+//       expect(last).to.equal('2.4.96');
+//     });
+//     describe('when matcher returns false', function () {
+//       describe('when another rule matches', function () {
+//         it('should include the note', function () {
+//           expr.addMatcher(function (exprFragments, posFragments) {
+//             if (posFragments.join('.') === '1.1.3') return false;
+//           });
+//           var result = expr([
+//             ['1.1.odd']
+//           ], standardOptions);
+//           var found = result.filter(function (res) {
+//             return res[0] === '1.1.03';
+//           });
+//           expect(found.length).to.equal(1);
+//         });
+//       });
+//       describe('when no other rule matches', function () {
+//         it('should not include the note', function () {
+//           expr.addMatcher(function (exprFragments, posFragments) {
+//             if (posFragments.join('.') === '1.1.2') return false;
+//           });
+//           var result = expr([
+//             ['1.1.odd']
+//           ], standardOptions);
+//           var found = result.filter(function (res) {
+//             return res[0] === '1.1.02';
+//           });
+//           expect(found.length).to.equal(0);
+//         });
+//       });
+//     });
+//     describe('when matcher returns true', function () {
+//       describe('when a previous rule matches', function () {
+//         it('should include the note', function () {
+//           expr.addMatcher(function (exprFragments, posFragments) {
+//             if (posFragments.join('.') === '1.1.5') return true;
+//           });
+//           var result = expr([
+//             ['1.1.odd']
+//           ], standardOptions);
+//           var found = result.filter(function (res) {
+//             return res[0] === '1.1.05';
+//           });
+//           expect(found.length).to.equal(1);
+//         });
+//         it('should not execute matcher', function () {
+//           var count = 0;
+//           expr.addMatcher(function (exprFragments, posFragments) {
+//             return true;
+//           });
+//           expr.addMatcher(function (exprFragments, posFragments) {
+//             count++;
+//           });
+//           var result = expr([
+//             ['1.1.*']
+//           ], standardOptions);
+//           expect(count).to.equal(0);
+//         });
+//       });
+//       describe('when no other rule matches', function () {
+//         it('should include the note', function () {
+//           expr.addMatcher(function (exprFragments, posFragments) {
+//             if (posFragments.join('.') === '1.1.4') return true;
+//           });
+//           var result = expr([
+//             ['1.1.foo']
+//           ], standardOptions);
+//           var found = result.filter(function (res) {
+//             return res[0] === '1.1.04';
+//           });
+//           expect(found.length).to.equal(1);
+//         });
+//       });
+//     });
+//   });
+// });

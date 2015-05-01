@@ -28,7 +28,9 @@
     "codeclimate-test-reporter": "0.0.4",
     "istanbul": "^0.3.8",
     "jshint": "^2.6.3",
-    "mocha": "^2.2.1"
+    "mocha": "^2.2.1",
+    "mocha-multi": "^0.7.1",
+    "mocha-osx-reporter": "^0.1.2"
   },
   "dependencies": {
     "lodash.memoize": "^3.0.3"
