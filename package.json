@@ -29,5 +29,8 @@
     "istanbul": "^0.3.8",
     "jshint": "^2.6.3",
     "mocha": "^2.2.1"
+  },
+  "dependencies": {
+    "lodash.memoize": "^3.0.3"
   }
 }

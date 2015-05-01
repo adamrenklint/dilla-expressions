@@ -145,31 +145,7 @@ describe('when using wildcard expression', function () {
 
 describe('when using even/odd expression', function () {
 
-  it('should repeat even bars', function () {
-    var result = expr([
-      ['even.2.45']
-    ], {
-      'beatsPerBar': 4,
-      'barsPerLoop': 4
-    });
-    expect(result.length).to.equal(2);
-    expect(result[0][0]).to.equal('2.2.45');
-    expect(result[1][0]).to.equal('4.2.45');
-  });
 
-  it('should repeat odd bars', function () {
-    var result = expr([
-      ['odd.1.25']
-    ], {
-      'beatsPerBar': 4,
-      'barsPerLoop': 8
-    });
-    expect(result.length).to.equal(4);
-    expect(result[0][0]).to.equal('1.1.25');
-    expect(result[1][0]).to.equal('3.1.25');
-    expect(result[2][0]).to.equal('5.1.25');
-    expect(result[3][0]).to.equal('7.1.25');
-  });
 
   it('should repeat even beats', function () {
     var result = expr([

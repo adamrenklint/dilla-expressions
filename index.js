@@ -1,8 +1,14 @@
-function isPlainPosition (position) {
-  return !!position.match(/^\d+\.\d+\.\d+$/);
+var memoize = require('lodash.memoize');
+
+function hashArgs () {
+  return [].slice.call(arguments).join('//');
 }
 
-function getPossiblePositions (barsPerLoop, beatsPerBar) {
+var isPlainPosition = memoize(function (position) {
+  return !!position.match(/^\d+\.\d+\.\d+$/);
+});
+
+var getPossiblePositions = memoize(function (barsPerLoop, beatsPerBar) {
   var possibles = [];
   var bar = 0, beat, tick, displayTick;
   while (++bar <= barsPerLoop) {
@@ -16,15 +22,15 @@ function getPossiblePositions (barsPerLoop, beatsPerBar) {
     }
   }
   return possibles;
-}
+}, hashArgs);
 
-function getFragments (position) {
+var getFragments = memoize(function  (position) {
   return position.split('.').map(function (fragment) {
     var fragmentNumber = parseInt(fragment, 10);
     if (fragment.match(/^\d+$/) && !isNaN(fragmentNumber)) return fragmentNumber;
     return fragment;
   });
-}
+});
 
 var matchers = [];
 
@@ -36,14 +42,14 @@ function addMatcher (matcher) {
 var gtRe = />(\d+)/;
 var ltRe = /<(\d+)/;
 
-function makeExpressionFunction (expression) {
+var makeExpressionFunction = memoize(function  (expression) {
   var exprFragments = getFragments(expression);
-  // console.log(exprFragments, expression)
-  return function expressionFn (position) {
+  return memoize(function (position) {
     var positionFragments = getFragments(position);
     var valid = true;
     exprFragments.some(function (exprFragment, index) {
       if (typeof exprFragment === 'number' && positionFragments[index] === exprFragment) return;
+      // console.log('>', positionFragments[index], index, exprFragment);
       exprFragment = '' + exprFragment;
 
       if (ltRe.test(exprFragment)) {
@@ -95,8 +101,8 @@ function makeExpressionFunction (expression) {
       }
     }
     return valid;
-  };
-}
+  });
+});
 
 function expressions (notes, options) {
 
