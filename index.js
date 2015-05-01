@@ -59,15 +59,15 @@ function expandToTree (fragment, tree, limit) {
     return;
   }
 
-  var gtMatch = 0, ltMatch = 0;
-
-  if (gtMatch = fragment.match(gtRe)) {
+  var gtMatch = fragment.match(gtRe) || 0;
+  if (gtMatch) {
     gtMatch = gtMatch && parseInt(gtMatch[1], 10);
     start = gtMatch + 1;
     fragment = fragment.replace(gtRe, '');
   }
 
-  if (ltMatch = fragment.match(ltRe)) {
+  var ltMatch = fragment.match(ltRe) || 0;
+  if (ltMatch) {
     ltMatch = ltMatch && parseInt(ltMatch[1], 10);
     limit = ltMatch - 1;
     fragment = fragment.replace(ltRe, '');
@@ -148,10 +148,6 @@ function expressions (notes, options) {
   });
 
   return all;
-  // return sort(all);
-  // return all.sort(function (a, b) {
-  //   return a < b ? -1 : a > b ? 1 : 0;
-  // });
 }
 
 module.exports = expressions;
