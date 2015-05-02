@@ -21,9 +21,9 @@ var getFragments = memoize(function  (position) {
   });
 });
 
-var skipInRange = memoize(function (min, limit, offset, step) {
+var skipInRange = memoize(function (min, end, offset, step) {
   var all = [];
-  while (offset <= limit) {
+  while (offset <= end) {
     if (offset > min) {
       all.push(offset);
     }
@@ -32,10 +32,10 @@ var skipInRange = memoize(function (min, limit, offset, step) {
   return all;
 }, serializeArgs);
 
-var getRange = memoize(function (start, limit) {
+var getRange = memoize(function (start, end) {
   var all = [];
   var i = start;
-  while (i <= limit) {
+  while (i <= end) {
     all.push(i);
     i++;
   }
@@ -51,7 +51,7 @@ var filterModulus = memoize(function  (range, mod, res) {
 var gtRe = />(\d+)/;
 var ltRe = /<(\d+)/;
 
-function expandToTree (fragment, tree, limit) {
+function expandToTree (fragment, tree, end, expander) {
   var start = 1;
 
   if (/^\d+$/.test(fragment)) {
@@ -69,11 +69,11 @@ function expandToTree (fragment, tree, limit) {
   var ltMatch = fragment.match(ltRe) || 0;
   if (ltMatch) {
     ltMatch = ltMatch && parseInt(ltMatch[1], 10);
-    limit = ltMatch - 1;
+    end = ltMatch - 1;
     fragment = fragment.replace(ltRe, '');
   }
 
-  var range = getRange(start, limit);
+  var range = getRange(start, end);
 
   // start new chain here, in case range was changed by gt/lt
   if (!fragment || fragment === '*') {
@@ -91,9 +91,17 @@ function expandToTree (fragment, tree, limit) {
     var pieces = fragment.split('%');
     var offset = pieces[0] && parseInt(pieces[0], 10) || 1;
     var step = parseInt(pieces[1], 10);
-    skipInRange(gtMatch, limit, offset, step).forEach(function (n) {
+    skipInRange(gtMatch, end, offset, step).forEach(function (n) {
       tree[n] = {};
     });
+  }
+  else if (typeof expander === 'function') {
+    var result = expander(fragment, start, end);
+    if (Array.isArray(result)) {
+      result.forEach(function (n) {
+        tree[n] = {};
+      });
+    }
   }
 }
 
@@ -110,17 +118,17 @@ function flattenTree (tree) {
   return all;
 }
 
-var expandExpression = memoize(function (position, bars, beats) {
+var expandExpression = memoize(function (position, bars, beats, expander) {
   var fragments = getFragments(position);
   var tree = {};
 
-  expandToTree(fragments[0], tree, bars);
+  expandToTree(fragments[0], tree, bars, expander);
 
   Object.keys(tree).forEach(function (bar) {
-    expandToTree(fragments[1], tree[bar], beats);
+    expandToTree(fragments[1], tree[bar], beats, expander);
 
     Object.keys(tree[bar]).forEach(function (beat) {
-      expandToTree(fragments[2], tree[bar][beat], 96);
+      expandToTree(fragments[2], tree[bar][beat], 96, expander);
     });
   });
 
@@ -140,7 +148,7 @@ function expressions (notes, options) {
 
     var position = event[0];
     if (isPlainPosition(position)) return all.push(event);
-    expandExpression(position, options.barsPerLoop, options.beatsPerBar).forEach(function (expanded) {
+    expandExpression(position, options.barsPerLoop, options.beatsPerBar, options.expander).forEach(function (expanded) {
       var clone = event.slice();
       clone[0] = expanded;
       all.push(clone);

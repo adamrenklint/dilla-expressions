@@ -1,5 +1,9 @@
 var chai = require('chai');
 var expect = chai.expect;
+var sinon = require('sinon');
+var sinonChai = require("sinon-chai");
+chai.use(sinonChai);
+
 var expr = require('../index');
 
 describe('when events is not defined', function () {
@@ -414,129 +418,77 @@ describe('when using mixed expression', function () {
   describe('when modulus is combined with less and greater than', function () {
     it('should only match the modulated values between', function () {
       var result = expr([
-        ['1.%3>4<15.01']
+        ['1.3%3>4<15.01']
       ], {
         'beatsPerBar': 20,
         'barsPerLoop': 1
       });
       expect(result.length).to.equal(3);
-      expect(result[0][0]).to.equal('1.7.01');
-      expect(result[1][0]).to.equal('1.10.01');
-      expect(result[2][0]).to.equal('1.13.01');
+      expect(result[0][0]).to.equal('1.6.01');
+      expect(result[1][0]).to.equal('1.9.01');
+      expect(result[2][0]).to.equal('1.12.01');
     });
   });
 });
 
-// describe('addMatcher (matcher)', function () {
-//   describe('when matcher is not a function', function () {
-//     it('should throw an error', function () {
-//       expect(function () {
-//         expr.addMatcher();
-//       }).to.throw(Error);
-//       expect(function () {
-//         expr.addMatcher('foo');
-//       }).to.throw(Error);
-//       expect(function () {
-//         expr.addMatcher(1323);
-//       }).to.throw(Error);
-//       expect(function () {
-//         expr.addMatcher({'pos': '1.1.01' });
-//       }).to.throw(Error);
-//       expect(function () {
-//         expr.addMatcher(['1.1.1.1.1']);
-//       }).to.throw(Error);
-//     });
-//   });
-//
-//   describe('when matcher is a function', function () {
-//     it('should execute the matcher for each possible note', function () {
-//       var count = 0;
-//       var last = null;
-//       expr.addMatcher(function (exprFragments, posFragments) {
-//         count++;
-//         last = posFragments.join('.');
-//       });
-//       expr([
-//         ['1.1.*']
-//       ], standardOptions);
-//       expect(count).to.equal(672);
-//       expect(last).to.equal('2.4.96');
-//     });
-//     describe('when matcher returns false', function () {
-//       describe('when another rule matches', function () {
-//         it('should include the note', function () {
-//           expr.addMatcher(function (exprFragments, posFragments) {
-//             if (posFragments.join('.') === '1.1.3') return false;
-//           });
-//           var result = expr([
-//             ['1.1.odd']
-//           ], standardOptions);
-//           var found = result.filter(function (res) {
-//             return res[0] === '1.1.03';
-//           });
-//           expect(found.length).to.equal(1);
-//         });
-//       });
-//       describe('when no other rule matches', function () {
-//         it('should not include the note', function () {
-//           expr.addMatcher(function (exprFragments, posFragments) {
-//             if (posFragments.join('.') === '1.1.2') return false;
-//           });
-//           var result = expr([
-//             ['1.1.odd']
-//           ], standardOptions);
-//           var found = result.filter(function (res) {
-//             return res[0] === '1.1.02';
-//           });
-//           expect(found.length).to.equal(0);
-//         });
-//       });
-//     });
-//     describe('when matcher returns true', function () {
-//       describe('when a previous rule matches', function () {
-//         it('should include the note', function () {
-//           expr.addMatcher(function (exprFragments, posFragments) {
-//             if (posFragments.join('.') === '1.1.5') return true;
-//           });
-//           var result = expr([
-//             ['1.1.odd']
-//           ], standardOptions);
-//           var found = result.filter(function (res) {
-//             return res[0] === '1.1.05';
-//           });
-//           expect(found.length).to.equal(1);
-//         });
-//         it('should not execute matcher', function () {
-//           var count = 0;
-//           expr.addMatcher(function (exprFragments, posFragments) {
-//             return true;
-//           });
-//           expr.addMatcher(function (exprFragments, posFragments) {
-//             count++;
-//           });
-//           var result = expr([
-//             ['1.1.*']
-//           ], standardOptions);
-//           expect(count).to.equal(0);
-//         });
-//       });
-//       describe('when no other rule matches', function () {
-//         it('should include the note', function () {
-//           expr.addMatcher(function (exprFragments, posFragments) {
-//             if (posFragments.join('.') === '1.1.4') return true;
-//           });
-//           var result = expr([
-//             ['1.1.foo']
-//           ], standardOptions);
-//           var found = result.filter(function (res) {
-//             return res[0] === '1.1.04';
-//           });
-//           expect(found.length).to.equal(1);
-//         });
-//       });
-//     });
-//   });
-// });
+describe('options.expander (expander)', function () {
+  describe('when expander is a function', function () {
+    describe('when expression is plain position', function () {
+      it('should not execute the expander', function () {
+        var spy = sinon.spy();
+        expr([
+          ['1.1.1']
+        ], {
+          beatsPerBar: 4,
+          barsPerLoop: 2,
+          expander: spy
+        });
+        expect(spy).not.to.have.been.called;
+      });
+    });
+    describe('when a fragment is expanded by a previous expression', function () {
+      it('should not execute the expander for that fragment', function () {
+        var spy = sinon.spy();
+        expr([
+          ['1.1.*']
+        ], {
+          beatsPerBar: 4,
+          barsPerLoop: 2,
+          expander: spy
+        });
+        expect(spy).not.to.have.been.called;
+      });
+    });
+    it('should execute expander for all three fragments', function () {
+      var spy = sinon.spy(function (fragment, start, end) {
+        return [1];
+      });
+      expr([
+        ['foo.foo.foo']
+      ], {
+        beatsPerBar: 4,
+        barsPerLoop: 2,
+        expander: spy
+      });
+      expect(spy).to.have.been.calledThrice;
+    });
+    it('should allow expander to add to tree', function () {
+      var result = expr([
+        ['1.foo.15']
+      ], {
+        beatsPerBar: 4,
+        barsPerLoop: 2,
+        expander: function (fragment, start, end) {
+          if (fragment === 'foo') {
+            return [2];
+          }
+        }
+      });
+      expect(result.length).to.equal(1);
+      expect(result[0][0]).to.equal('1.2.15');
+    });
+  });
+});
 
 describe('benchmark', function () {
   describe('when adding a single expression', function () {
@@ -545,7 +497,7 @@ describe('benchmark', function () {
       var result = expr([
         ['*.*.*']
       ], standardOptions);
-      expect(new Date() - start).to.be.lessThan(4);
+      expect(new Date() - start).to.be.lessThan(2);
     });
   });
   describe('when repeating a single expression', function () {
