@@ -561,3 +561,64 @@ describe('addMatcher (matcher)', function () {
     });
   });
 });
+
+describe('benchmark', function () {
+  describe('when adding a "normal" set of notes', function () {
+    it('should not be slow', function () {
+      this.timeout(5000);
+      var options = {
+        beatsPerBar: 4,
+        barsPerLoop: 8
+      };
+      var drum = [
+        ['odd.1.01', 'A01'],
+        ['odd.1.51', 'A01'],
+        ['odd.1.91', 'A02'],
+        ['odd.2.88', 'A01'],
+        ['odd.3.75', 'A01'],
+        ['odd.3.91', 'A02'],
+        ['odd.4.72', 'A01'],
+        ['even.1.91', 'A02'],
+        ['even.1.51', 'A01'],
+        ['even.3.51', 'A01'],
+        ['even.3.88', 'A01'],
+        ['even.4.03', 'A02']
+      ];
+      var hihat = [
+        ['*.odd.01', 'A03'],
+        ['*.even.01', 'A03'],
+        ['*.4.53', 'A03']
+      ];
+      var lead = [
+        ['odd.1.01', 'B01'],
+        ['odd.4.90', 'B02'],
+        ['even.1.52', 'B02']
+      ];
+      var follow = [
+        ['odd.2.05', 'C03'],
+        ['odd.2.51', 'C03'],
+        ['odd.3.05', 'C03'],
+        ['odd.3.51', 'C03'],
+        ['odd.3.75', 'C01'],
+        ['odd.4.52', 'C01'],
+        ['even.2.05', 'C03'],
+        ['even.2.50', 'C02'],
+        ['even.3.25', 'C01'],
+        ['even.4.01', 'C01'],
+        ['even.4.75', 'C01']
+      ];
+      var bass = [
+        ['odd.1.01', 'D01'],
+        ['odd.2.72', 'D01'],
+        ['odd.3.02', 'D01'],
+        ['odd.4.01', 'D01'],
+        ['odd.4.51', 'D01'],
+        ['even.3.51', 'D01'],
+        ['even.4.51', 'D01']
+      ];
+      [drum, hihat, lead, follow, bass].forEach(function (pattern) {
+        expr(pattern, options);
+      });
+    });
+  });
+});
