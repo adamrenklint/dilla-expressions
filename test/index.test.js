@@ -509,7 +509,7 @@ describe('benchmark', function () {
       expect(new Date() - start).to.be.lessThan(4);
     });
   });
-  describe('when adding a "normal" set of notes', function () {
+  describe('when adding a large set of expressions', function () {
     it('should not be slow', function () {
       this.timeout(5000);
       var start = new Date();
@@ -566,7 +566,7 @@ describe('benchmark', function () {
       [drum, hihat, lead, follow, bass].forEach(function (pattern) {
         expr(pattern, options);
       });
-      expect(new Date() - start).to.be.lessThan(6);
+      expect(new Date() - start).to.be.lessThan(7);
     });
   });
 });
