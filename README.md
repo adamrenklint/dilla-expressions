@@ -1,8 +1,12 @@
 # dilla-expressions
 
-[![NPM version](https://badge.fury.io/js/dilla-expressions.png)](http://badge.fury.io/js/dilla-expressions) [![Build Status](https://travis-ci.org/adamrenklint/dilla-expressions.png?branch=master)](https://travis-ci.org/adamrenklint/dilla-expressions) [![Code Climate](https://codeclimate.com/github/adamrenklint/dilla-expressions.png)](https://codeclimate.com/github/adamrenklint/dilla-expressions) [![Test Coverage](https://codeclimate.com/github/adamrenklint/dilla-expressions/badges/coverage.svg)](https://codeclimate.com/github/adamrenklint/dilla-expressions) [![Dependency Status](https://david-dm.org/adamrenklint/dilla-expressions.png?theme=shields.io)](https://david-dm.org/adamrenklint/dilla-expressions)
+[![npm](https://img.shields.io/npm/v/dilla-expressions.svg?style=flat-square)](https://www.npmjs.com/package/dilla-expressions) [![npm](https://img.shields.io/npm/dm/dilla-expressions.svg?style=flat-square)](https://www.npmjs.com/package/dilla-expressions) [![GitHub stars](https://img.shields.io/github/stars/adamrenklint/dilla-expressions.svg?style=flat-square)](https://github.com/adamrenklint/dilla-expressions/stargazers) [![GitHub forks](https://img.shields.io/github/forks/adamrenklint/dilla-expressions.svg?style=flat-square)](https://github.com/adamrenklint/dilla-expressions/network)
 
-> expand expressions for repeating notes into flat positions in [dilla](https://github.com/adamrenklint/dilla)
+[![Travis branch](https://img.shields.io/travis/adamrenklint/dilla-expressions.svg?style=flat-square)](https://travis-ci.org/adamrenklint/dilla-expressions) [![Code Climate](https://img.shields.io/codeclimate/github/adamrenklint/dilla-expressions.svg?style=flat-square)](https://codeclimate.com/github/adamrenklint/dilla-expressions) [![Code Climate](https://img.shields.io/codeclimate/coverage/github/adamrenklint/dilla-expressions.svg?style=flat-square)](https://codeclimate.com/github/adamrenklint/dilla-expressions) [![David dependencies](https://img.shields.io/david/adamrenklint/dilla-expressions.svg?style=flat-square)](https://david-dm.org/adamrenklint/dilla-expressions) [![David devDependencies](https://img.shields.io/david/dev/adamrenklint/dilla-expressions.svg?style=flat-square)](https://david-dm.org/adamrenklint/dilla-expressions#info=devDependencies)
+
+> expand expressions for repeating notes into flat positions
+
+Built for and used in [dilla](https://github.com/adamrenklint/dilla) and [bap](http://bapjs.org), by [Adam Renklint](http://adamrenklint.com)
 
 ## Install
 
