@@ -539,9 +539,28 @@ describe('when using mixed expression', function () {
 // });
 
 describe('benchmark', function () {
+  describe('when adding a single expression', function () {
+    it('should not be slow', function () {
+      var start = new Date();
+      var result = expr([
+        ['*.*.*']
+      ], standardOptions);
+      expect(new Date() - start).to.be.lessThan(4);
+    });
+  });
+  describe('when repeating a single expression', function () {
+    it('should not be slow', function () {
+      var start = new Date();
+      expr([['*.*.*']], standardOptions);
+      expr([['*.*.*']], standardOptions);
+      expr([['*.*.*']], standardOptions);
+      expect(new Date() - start).to.be.lessThan(4);
+    });
+  });
   describe('when adding a "normal" set of notes', function () {
     it('should not be slow', function () {
       this.timeout(5000);
+      var start = new Date();
       var options = {
         beatsPerBar: 4,
         barsPerLoop: 8
@@ -595,6 +614,7 @@ describe('benchmark', function () {
       [drum, hihat, lead, follow, bass].forEach(function (pattern) {
         expr(pattern, options);
       });
+      expect(new Date() - start).to.be.lessThan(6);
     });
   });
 });
