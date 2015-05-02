@@ -80,7 +80,7 @@ It is possible to extend dilla-expressions with your own expression expander.
 
 The position is split into three fragments. An expander function will be called for each fragment of the position expression that is not a simple number or already expanded by a previous expander, i.e. wildcard, modulus, etc...
 
-Start and end represent the start and endpoints for the current fragment, and would most times be the same as barsPerLoop, but could be another value if the expression is combined with the *greater than* or *less than* operators.
+Start and end represent the start and endpoints for the current fragment, and would most times be the same as barsPerLoop, but could be another value if the fragment is combined with the *greater than* or *less than* operators.
 
 ```js
 var expanded = expr([
