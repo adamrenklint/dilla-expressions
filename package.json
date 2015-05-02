@@ -1,6 +1,6 @@
 {
   "name": "dilla-expressions",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "expand expressions for repeating notes into flat positions",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,13 @@
     "codeclimate-test-reporter": "0.0.4",
     "istanbul": "^0.3.8",
     "jshint": "^2.6.3",
-    "mocha": "^2.2.1"
+    "mocha": "^2.2.1",
+    "mocha-multi": "^0.7.1",
+    "mocha-osx-reporter": "^0.1.2",
+    "sinon": "^1.14.1",
+    "sinon-chai": "^2.7.0"
+  },
+  "dependencies": {
+    "lodash.memoize": "^3.0.3"
   }
 }

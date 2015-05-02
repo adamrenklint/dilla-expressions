@@ -10,10 +10,10 @@ install:
 	@npm install
 
 test: lint
-	@$(MOCHA) -s 10
+	multi='mocha-osx-reporter=- spec=-' $(MOCHA) -s 5 test/*.test.js --reporter mocha-multi
 
 watch:
-	@$(MOCHA) -w -s 10
+	multi='mocha-osx-reporter=- spec=-' $(MOCHA) -s 5 test/*.test.js --reporter mocha-multi -w
 
 coverage:
 	@$(ISTANBUL) cover $(_MOCHA) -- test/*.test.js -R dot

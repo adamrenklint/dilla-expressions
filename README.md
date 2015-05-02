@@ -74,19 +74,30 @@ expect(expanded[3][0]).to.equal('2.4.01');
 = "1.1.01", "1.2.01", "1.3.01"
 ```
 
-## Custom matchers
+## Custom expander
 
-It is possible to add a custom *matcher callback*, a function which gets executed for each possible position within the range.
+It is possible to extend dilla-expressions with your own expression expander.
 
-The matcher function receives two arguments, arrays with bar, beat and tick values - for user defined expression, and possible matched position.
+The position is split into three fragments. An expander function will be called for each fragment of the position expression that is not a simple number or already expanded by a previous expander, i.e. wildcard, modulus, etc...
 
-The stack of matchers will continue to execute until a position has been accepted or until the stack ends.
+Start and end represent the start and endpoints for the current fragment, and would most times be the same as barsPerLoop, but could be another value if the fragment is combined with the *greater than* or *less than* operators.
 
 ```js
-expr.addMatcher(function (exprFragments, posFragments) {
-  if (posFragments[2] === 45) return true;
-  return false;
+var expanded = expr([
+  ['foo.bar.baz']
+], {
+  'barsPerLoop': 2,
+  'beatsPerBar': 4,
+  'expander': function (fragment, start, end) {
+    if (fragment === 'foo') { return [1, 2]; }
+    else if (fragment === 'bar') { return [end/2]; }
+    else if (fragment === 'baz') { return [15]; }
+  }
 });
+
+expect(expanded.length).to.equal(2);
+expect(expanded[0][0]).to.equal('1.2.15');
+expect(expanded[1][0]).to.equal('2.2.15');
 ```
 
 ## Develop
@@ -109,6 +120,12 @@ expr.addMatcher(function (exprFragments, posFragments) {
   - FIXED: ```1.2%1.01``` expression would incorrectly match ```1.1.01```
 - **1.2.0**
   - NEW: greater than and less than operators
+- **2.0.0**
+  - NEW: completely refactored to improve performance
+    - Single expression: 23ms to 1ms (23x)
+    - Repeated single expression: 77ms to 1ms (77x)
+    - Large expression: 4,659ms to 3ms (1,553x)
+  - CHANGED: Removed ```expr.addMatcher``` in favor of ```options.expander``` fn for custom expander logic
 
 ## License
 
