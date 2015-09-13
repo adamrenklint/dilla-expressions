@@ -130,6 +130,8 @@ expect(expanded[1][0]).to.equal('2.2.15');
     - Repeated single expression: 77ms to 1ms (77x)
     - Large expression: 4,659ms to 3ms (1,553x)
   - CHANGED: Removed ```expr.addMatcher``` in favor of ```options.expander``` fn for custom expander logic
+- **2.1.0**
+  - CHANGED: use [meemo](http://github.com/adamrenklint/meemo) for memoization with less allocation and memory churn
 
 ## License
 

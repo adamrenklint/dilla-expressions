@@ -1,4 +1,4 @@
-var memoize = require('lodash.memoize');
+var memoize = require('meemo');
 
 function hashArgs () {
   return [].slice.call(arguments).join('//');
