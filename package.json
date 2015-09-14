@@ -1,6 +1,6 @@
 {
   "name": "dilla-expressions",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "expand expressions for repeating notes into flat positions",
   "main": "index.js",
   "scripts": {
@@ -24,17 +24,17 @@
   },
   "homepage": "https://github.com/adamrenklint/dilla-expressions",
   "devDependencies": {
-    "chai": "^2.1.1",
+    "chai": "2.1.1",
     "codeclimate-test-reporter": "0.0.4",
-    "istanbul": "^0.3.8",
-    "jshint": "^2.6.3",
-    "mocha": "^2.2.1",
-    "mocha-multi": "^0.7.1",
-    "mocha-osx-reporter": "^0.1.2",
-    "sinon": "^1.14.1",
-    "sinon-chai": "^2.7.0"
+    "istanbul": "0.3.8",
+    "jshint": "2.6.3",
+    "mocha": "2.2.1",
+    "mocha-multi": "0.7.1",
+    "mocha-osx-reporter": "0.1.2",
+    "sinon": "1.14.1",
+    "sinon-chai": "2.7.0"
   },
   "dependencies": {
-    "meemo": "^1.1.0"
+    "meemo": "1.1.1"
   }
 }

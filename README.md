@@ -134,6 +134,8 @@ expect(expanded[1][0]).to.equal('2.2.15');
   - CHANGED: use [meemo](http://github.com/adamrenklint/meemo) for memoization with less allocation and memory churn
 - **2.1.1**
   - CHANGED: Use meemo 1.1
+- **2.1.2**
+  - CHANGED: Use meemoi 1.1.1, fixes issue with referencing window
 
 ## License
 
