@@ -132,6 +132,8 @@ expect(expanded[1][0]).to.equal('2.2.15');
   - CHANGED: Removed ```expr.addMatcher``` in favor of ```options.expander``` fn for custom expander logic
 - **2.1.0**
   - CHANGED: use [meemo](http://github.com/adamrenklint/meemo) for memoization with less allocation and memory churn
+- **2.1.1**
+  - CHANGED: Use meemo 1.1
 
 ## License
 
