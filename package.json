@@ -1,6 +1,6 @@
 {
   "name": "dilla-expressions",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "expand expressions for repeating notes into flat positions",
   "main": "index.js",
   "scripts": {
@@ -35,6 +35,6 @@
     "sinon-chai": "2.7.0"
   },
   "dependencies": {
-    "meemo": "1.1.1"
+    "meemo": "1.1.2"
   }
 }

@@ -136,6 +136,8 @@ expect(expanded[1][0]).to.equal('2.2.15');
   - CHANGED: Use meemo 1.1
 - **2.1.2**
   - CHANGED: Use meemoi 1.1.1, fixes issue with referencing window
+- **2.1.3**
+  - CHANGED: Use meemoi 1.1.2, fixes issue with deoptimized memoization handler
 
 ## License
 
